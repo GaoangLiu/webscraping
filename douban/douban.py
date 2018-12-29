@@ -8,44 +8,86 @@ from PIL import Image
 from PIL import ImageOps
 import sys
 from ocr import OCR
+import pickle
+import json
 
 
-class Account:
-	def __init__(self):
-		pass 
+class Douban:
+    def __init__(self):
+        ''' Two cases: 1. this account was logged in before before, a cookie file was created
+        2. there is no such cookie file
+        '''
+        self.session = requests.Session()
 
-	def login(self):
-		html = urlopen("http://www.douban.com/login")
-		bsobj = BeautifulSoup(html, 'lxml')
+    def is_login(self):
+        ''' Login or not, two cases to consider:
+        1. this account was logged in before before, a cookie file was created;
+        2. there is no such cookie file  .
+        return: boolean
+        '''
+        if not os.path.exists("conf.d/cookie.dat"):
+            return False
+
+        with open('conf.d/cookie.dat', 'rb') as f:
+            cookies = pickle.load(f)
+            cj = requests.cookies.RequestsCookieJar()
+            cj._cookies = cookies
+            self.session.cookies = cj
+
+        r_get = self.session.get('http://www.douban.com')
+        return 'UPLOAD_AUTH_TOKEN' in BeautifulSoup(r_get.text, 'lxml')
+
+    def get_account(self):
+        return json.load(open('/usr/local/info/douban.json', 'r'))
+
+    def save_cookies_login(self):
+        ''' Log in account and localize cookies for further explorations.
+        '''
+        if self.is_login():
+            print("🕷 Cookies remain valid, already logged in.")
+            return
+
+        dhost = "http://accounts.douban.com/login"
+        r_get = self.session.get(dhost)
+        bs_get = BeautifulSoup(r_get.text, 'lxml')
+
+        captcha_solution = self.rec_captcha(
+            bs_get.find("img", {"id": "captcha_image"}))
+        cid = bs_get.find("input", {"name": "captcha-id"})
+        captcha_id = cid['value'] if cid else None
+        account = self.get_account()
+
+        params = {
+            'form_email': account['email'],
+            'form_password': account['password'],
+            'captcha-solution': captcha_solution,
+            'captcha-id': captcha_id}
+
+        print(params)
+        r_post = self.session.post(dhost, data=params)
+
+        print(r_post.text)
+        if "UPLOAD_AUTH_TOKEN" in r_post.text:
+            print("Login SUCCEED.")
+            # save cookies to local
+            with open('conf.d/cookies.dat', 'wb') as f:
+                pickle.dump(self.session.cookies._cookies, f)
+        return
+
+    def rec_captcha(self, captcha_items):
+        ''' recognize captcha, either automatically or manually.
+        '''
+        if captcha_items:
+            image_path = "images/captcha.jpg"
+            urlretrieve(captcha_items['src'], image_path)
+            return OCR().process_image(image_path)
+        else:
+            print("🕷 There is no captcha for this login page.")
 
 
-		# Sometimes, we don't need to recognize captcha
-		captcha = bsobj.find("img", {"id": "captcha_image"})
-		if captcha:
-			image_path = "images/captcha.jpg"
-			urlretrieve(captcha['src'], image_path)
-			self.recognize_captcha(image_path)
+Douban().save_cookies_login()
 
 
-	def recognize_captcha(self, img):
-		OCR().process(img)
-
-Account().login()
-
-
-# os.system("open captcha.jpg")
-# captcha_solution = input("input what u see : ")
-
-# captcha_id = bsobj.find("input", {"name": "captcha-id"})["value"]
-# print("img_link  :", image_location)
-# print("captcha_id:", captcha_id)
-
-
-# if len(captcha_solution) > 0:
-#     params = {
-#         'form_email': 'douban@gmail.com',
-#         'form_password': 'doubanadmin',
-#         'captcha-solution': captcha_solution,
 #         'captcha-id': captcha_id
 #     }
 

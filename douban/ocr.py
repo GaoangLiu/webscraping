@@ -66,28 +66,38 @@ class OCR:
         img.save("mov_noise_fig.jpg")
         return
 
-    def image_to_string(self, img):
+    def image_to_string(self, opened_img):
+        '''return: string (recognized captcha)'''
         try:
             result = pytesseract.image_to_string(
-                img).strip().strip(string.punctuation).lower()
+                opened_img).strip().strip(string.punctuation).lower()
             # All captchas I've seen on Douban.com are typical English words, hence we use
-            # PyEnchant to check whether the recognized word is a real word.
+            # PyEnchant to check whether the recognized word is a real word.  
             d = enchant.Dict("en_US")
-            if d.check(result):
+            if result and d.check(result):
                 return result
             else:
-                print('-- recognized captcha is: ', result)
-                print("-- not sure about the captcha, return one from the following",
-                    d.suggest(result))
-                return d.suggest(result)[0]
-        except BaseException:
+                print(">> Automatically OCR failed, try recognize image manually.")
+                Image.open('images/captcha.jpg').show()                
+                return input(">> Type in here what you see in the image: ")
+
+                # print('>> Recognized captcha is: ', result)
+                # print(">> Not sure about the captcha, return one from the following :",
+                #     d.suggest(result))
+                # return d.suggest(result)[0]
+        except BaseException as ex:
+            print(ex)
             return None
 
-    def process(self, img_path):
+    def process_image(self, img_path):
+        '''
+        return: String (recognized captcha)
+        '''
         img = Image.open(img_path)
         self.pre_concert(img)
         self.remove_noise(img, 2)
-        print(self.image_to_string(img))
+        return self.image_to_string(img)
+
 
 
 if __name__ == '__main__':
