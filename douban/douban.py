@@ -17,7 +17,7 @@ class Douban:
         ''' Two cases: 1. this account was logged in before before, a cookie file was created
         2. there is no such cookie file
         '''
-        self.session = requests.Session()
+        pass 
 
     def is_login(self):
         ''' Login or not, two cases to consider:
@@ -28,14 +28,16 @@ class Douban:
         if not os.path.exists("conf.d/cookie.dat"):
             return False
 
+        session = requests.Session()
         with open('conf.d/cookie.dat', 'rb') as f:
             cookies = pickle.load(f)
             cj = requests.cookies.RequestsCookieJar()
             cj._cookies = cookies
-            self.session.cookies = cj
+            session.cookies = cj
 
-        r_get = self.session.get('http://www.douban.com')
-        return 'UPLOAD_AUTH_TOKEN' in BeautifulSoup(r_get.text, 'lxml')
+        r_get = session.get('http://www.douban.com')
+        soup = BeautifulSoup(r_get.text, 'lxml')
+        return 'UPLOAD_AUTH_TOKEN' in soup.text
 
     def get_account(self):
         return json.load(open('/usr/local/info/douban.json', 'r'))
@@ -44,11 +46,13 @@ class Douban:
         ''' Log in account and localize cookies for further explorations.
         '''
         if self.is_login():
-            print("🕷 Cookies remain valid, already logged in.")
+            print("🕷  Cookie remains valid, already logged in.")
             return
+        else:
+            print("🕷  Cookie is no more valid.")
 
-        dhost = "http://accounts.douban.com/login"
-        r_get = self.session.get(dhost)
+        dhost = "http://www.douban.com/login"
+        r_get = requests.get(dhost)
         bs_get = BeautifulSoup(r_get.text, 'lxml')
 
         captcha_solution = self.rec_captcha(
@@ -62,16 +66,18 @@ class Douban:
             'form_password': account['password'],
             'captcha-solution': captcha_solution,
             'captcha-id': captcha_id}
-
         print(params)
-        r_post = self.session.post(dhost, data=params)
 
-        print(r_post.text)
-        if "UPLOAD_AUTH_TOKEN" in r_post.text:
-            print("Login SUCCEED.")
+        session = requests.Session()
+        s = session.post("https://accounts.douban.com/login",data=params)
+        soup = BeautifulSoup(s.text, features="lxml")
+        # print(soup.text)
+
+        if 'UPLOAD_AUTH_TOKEN' in soup.text:
+            print("Login SUCCESS!")
             # save cookies to local
-            with open('conf.d/cookies.dat', 'wb') as f:
-                pickle.dump(self.session.cookies._cookies, f)
+            with open('conf.d/cookie.dat', 'wb') as f:
+                pickle.dump(session.cookies._cookies, f)
         return
 
     def rec_captcha(self, captcha_items):
@@ -86,10 +92,9 @@ class Douban:
 
 
 Douban().save_cookies_login()
+# print(Douban().is_login())
 
 
-#         'captcha-id': captcha_id
-#     }
 
 #     session = requests.Session()
 #     s = session.post(

@@ -27,7 +27,7 @@ class OCR:
                     img.putpixel((i, j), WHITE)
                 else:
                     img.putpixel((i, j), BLACK)
-        img.save("pre_fig.jpg")
+        img.save("images/pre_fig.jpg")
         return
 
     def remove_noise(self, img, window=1):
@@ -63,7 +63,7 @@ class OCR:
                         img.putpixel((i, j), BLACK)
                     else:
                         img.putpixel((i, j), WHITE)
-        img.save("mov_noise_fig.jpg")
+        img.save("images/mov_noise_fig.jpg")
         return
 
     def image_to_string(self, opened_img):
