@@ -11,23 +11,27 @@ from ocr import OCR
 
 
 class Account:
-    def __init__(self):
-        pass 
+	def __init__(self):
+		pass 
 
-    def login(self):
-        pass 
+	def login(self):
+		html = urlopen("http://www.douban.com/login")
+		bsobj = BeautifulSoup(html, 'lxml')
 
-    def recognize_captcha(self):
-        OCR().process()
 
-Account().recognize_captcha()
+		# Sometimes, we don't need to recognize captcha
+		captcha = bsobj.find("img", {"id": "captcha_image"})
+		if captcha:
+			image_path = "images/captcha.jpg"
+			urlretrieve(captcha['src'], image_path)
+			self.recognize_captcha(image_path)
 
-# # html = urlopen("http://www.pythonscraping.com/humans-only")
-# html = urlopen("http://www.douban.com/login")
-# bsobj = BeautifulSoup(html, features='lxml')
 
-# image_location = bsobj.find("img", {"id": "captcha_image"})["src"]
-# urlretrieve(image_location, 'captcha.jpg')
+	def recognize_captcha(self, img):
+		OCR().process(img)
+
+Account().login()
+
 
 # os.system("open captcha.jpg")
 # captcha_solution = input("input what u see : ")
@@ -39,8 +43,8 @@ Account().recognize_captcha()
 
 # if len(captcha_solution) > 0:
 #     params = {
-#         'form_email': 'windycat@pm.me',
-#         'form_password': 'douban@2019',
+#         'form_email': 'douban@gmail.com',
+#         'form_password': 'doubanadmin',
 #         'captcha-solution': captcha_solution,
 #         'captcha-id': captcha_id
 #     }

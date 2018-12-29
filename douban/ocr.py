@@ -76,19 +76,19 @@ class OCR:
             if d.check(result):
                 return result
             else:
-                print(
-                    "Not sure about the captcha, return one from the following",
-                    d.suggest(result)[0])
+                print('-- recognized captcha is: ', result)
+                print("-- not sure about the captcha, return one from the following",
+                    d.suggest(result))
                 return d.suggest(result)[0]
         except BaseException:
             return None
 
-    def process(self):
-        img = Image.open("captcha.jpg")
+    def process(self, img_path):
+        img = Image.open(img_path)
         self.pre_concert(img)
         self.remove_noise(img, 2)
         print(self.image_to_string(img))
 
 
 if __name__ == '__main__':
-    OCR().process()
+    OCR().process('images/captcha.jpg')
