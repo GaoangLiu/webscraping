@@ -7,8 +7,28 @@ import json
 
 
 class Readfree:
-	def __init__(self, account_json):
+	def __init__(self, account_json='/user/local/info/readfree.json'):
 		self.account_json = account_json
+
+	def is_login(self):
+		# return either False or a session with cookie loaded 
+		cookie_path = 'conf.d/cookies.dat'
+		if not os.path.exists(cookie_path):
+			return False 
+
+		session = requests.Session()
+		with open(cookie_path, 'rb') as f:
+			cookies = pickle.load(f)
+			cj = requests.cookies.RequestsCookieJar()
+			cj._cookies = cookies
+			session.cookies = cj
+
+		r_get = session.get("http://readfree.me/accounts/profile/bluesea/wish/")
+		if '/accounts/profile' in r_get.text:
+			print("🕷  Yes, cookie remains valid.")
+			return session
+		else:
+			return False
 
 	def recognize_captcha(self, img):
 		OCR().process(img)
@@ -31,9 +51,13 @@ class Readfree:
 			# self.recognize_captcha(image_path)
 		return text
 
-	def saveCookiesLogin(self):
+	def save_cookie_login(self):
 		''' Log in account and localize cookies for further explorations. 
+		return logged session 
 		'''
+		session = self.is_login()
+		if session: return session
+
 		dhost = "http://readfree.me/accounts/login/?next=/"
 		session = requests.Session()
 		r_get = session.get(dhost)
@@ -58,7 +82,24 @@ class Readfree:
 			# save cookies to local
 			with open ('conf.d/cookies.dat', 'wb') as f:
 				pickle.dump(session.cookies._cookies, f)
-		return 
+		return session
+
+
+	def get_account_info(self):
+		import re
+		session = self.save_cookie_login()
+		soup = BeautifulSoup(session.get('http://readfree.me').text, 'lxml')
+		# print(soup)
+		link = soup.find("a", href=re.compile(".*accounts/profile.*"))
+		username = ''
+		if link:
+			username = re.search(r'profile/(.*)/wish', str(link)).group(1)
+			print("username:", username)
+			moresoup = BeautifulSoup(session.get("http://readfree.me" + link.attrs['href']).text, 'lxml')
+			for item in moresoup.findAll('p', {"class":"muted"}):
+				print(item.text)
+
+
 
 
 	def parse_page_books(self):
@@ -69,8 +110,9 @@ class Readfree:
 			# print(book.text, book.attrs['href'])
 
 
-rf = Readfree('/usr/local/info/readfree.json')
-rf.saveCookiesLogin()
+if __name__ == '__main__':
+	rf = Readfree('/usr/local/info/readfree.json')
+	rf.save_cookie_login()
 
 
 

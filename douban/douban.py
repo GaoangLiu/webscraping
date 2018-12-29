@@ -23,7 +23,8 @@ class Douban:
         ''' Login or not, two cases to consider:
         1. this account was logged in before before, a cookie file was created;
         2. there is no such cookie file  .
-        return: boolean
+        return False if there is no cookie or cookie is no more valid, 
+        otherwise return the session 
         '''
         if not os.path.exists("conf.d/cookie.dat"):
             return False
@@ -37,7 +38,7 @@ class Douban:
 
         r_get = session.get('http://www.douban.com')
         soup = BeautifulSoup(r_get.text, 'lxml')
-        return 'UPLOAD_AUTH_TOKEN' in soup.text
+        return session if 'UPLOAD_AUTH_TOKEN' in soup.text else False 
 
     def get_account(self):
         return json.load(open('/usr/local/info/douban.json', 'r'))

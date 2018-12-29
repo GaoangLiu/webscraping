@@ -3,3 +3,4 @@
 * Sat 12/29/18/10:26:15: [new work]: daily login(use cookies) readfree.me
 * Sat 12/29/18/14:27:17: [minor-revise]: try store cookie after each login of douban
 * Sat 12/29/18/18:08:25: [bug-fixed]: use cookie to keep douban account stayed logged in
+* Sun 12/30/18/01:27:49: [feature]: check status of readfree account

@@ -1,7 +1,19 @@
 import pickle
 import requests
 from urllib.request import urlretrieve
+import sys
+from readfree import Readfree
 
+
+Readfree().get_account_info()
+
+def keep_sign_in():
+	# just to get more credits 
+	while True:
+		Readfree().get_account_info()
+
+
+sys.exit(0)
 with open('conf.d/cookies.dat', 'rb') as f:
     cookies = pickle.load(f)
 cj = requests.cookies.RequestsCookieJar()
@@ -9,7 +21,8 @@ cj._cookies = cookies
 session = requests.Session()
 session.cookies = cj
 
-r_get = session.get("http://readfree.me/accounts/profile/main/wish/")
+r_get = session.get("http://readfree.me/accounts/profile/bluesea/wish/")
+print(r_get.text)
 if '/accounts/profile' in r_get.text:
 	print("🕷 Yes, cookies remain valid.")
 
