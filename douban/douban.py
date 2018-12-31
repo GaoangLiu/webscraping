@@ -17,28 +17,32 @@ class Douban:
         ''' Two cases: 1. this account was logged in before before, a cookie file was created
         2. there is no such cookie file
         '''
-        pass 
+        self.session = self.save_cookies_login()
+        self.mainpage = "https://www.douban.com"
 
     def is_login(self):
         ''' Login or not, two cases to consider:
         1. this account was logged in before before, a cookie file was created;
         2. there is no such cookie file  .
-        return False if there is no cookie or cookie is no more valid, 
-        otherwise return the session 
+        return False if there is no cookie or cookie is no more valid,
+        otherwise return the session
         '''
-        if not os.path.exists("conf.d/cookie.dat"):
+        if not os.path.exists("/usr/local/info/dbcookie.dat"):
             return False
 
         session = requests.Session()
-        with open('conf.d/cookie.dat', 'rb') as f:
+        with open('/usr/local/info/dbcookie.dat', 'rb') as f:
             cookies = pickle.load(f)
             cj = requests.cookies.RequestsCookieJar()
             cj._cookies = cookies
             session.cookies = cj
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
+            session.headers = headers
 
         r_get = session.get('http://www.douban.com')
         soup = BeautifulSoup(r_get.text, 'lxml')
-        return session if 'UPLOAD_AUTH_TOKEN' in soup.text else False 
+        return session if 'UPLOAD_AUTH_TOKEN' in soup.text else False
 
     def get_account(self):
         return json.load(open('/usr/local/info/douban.json', 'r'))
@@ -46,9 +50,10 @@ class Douban:
     def save_cookies_login(self):
         ''' Log in account and localize cookies for further explorations.
         '''
-        if self.is_login():
+        session = self.is_login()
+        if session:
             print("🕷  Cookie remains valid, already logged in.")
-            return
+            return session
         else:
             print("🕷  Cookie is no more valid.")
 
@@ -70,16 +75,20 @@ class Douban:
         print(params)
 
         session = requests.Session()
-        s = session.post("https://accounts.douban.com/login",data=params)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
+        session.headers = headers
+
+        s = session.post("https://accounts.douban.com/login", data=params)
         soup = BeautifulSoup(s.text, features="lxml")
         # print(soup.text)
 
         if 'UPLOAD_AUTH_TOKEN' in soup.text:
             print("Login SUCCESS!")
             # save cookies to local
-            with open('conf.d/cookie.dat', 'wb') as f:
+            with open('/usr/local/info/dbcookie.dat', 'wb') as f:
                 pickle.dump(session.cookies._cookies, f)
-        return
+        return session
 
     def rec_captcha(self, captcha_items):
         ''' recognize captcha, either automatically or manually.
@@ -91,10 +100,23 @@ class Douban:
         else:
             print("🕷 There is no captcha for this login page.")
 
+    def post_status(self, content):
+        ''' For now, only pure text status is support
+        '''
+        ck_value = BeautifulSoup(
+            self.session.get(
+                self.mainpage).text, 'lxml').find(
+            "input", {
+                "name": "ck"})['value'].strip()
+        # files = {'media': open('images/captcha.jpg', 'rb').read()}
+        # img=open('images/captcha.jpg', 'rb').read()
+        self.session.post(self.mainpage, data={'ck':ck_value, 'comment': content)
+        print("🐜 status posted SUCCEED !")
 
-Douban().save_cookies_login()
-# print(Douban().is_login())
 
+if __name__ == '__main__':
+    db = Douban()
+    db.post_status("-- sent with Python.")
 
 
 #     session = requests.Session()
