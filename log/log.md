@@ -33,3 +33,12 @@
 * Sun 12/30/18/01:27:49: [feature]: check status of readfree account
 * Sun 12/30/18/08:45:59: [feature]: add delete_history function to readfree.py
 ```
+* Fri 12/28/18/14:08:19: [first commit]: sketch built
+* Sat 12/29/18/09:18:21: [feature]: ocr to recognize douban captcha
+* Sat 12/29/18/10:26:15: [new work]: daily login(use cookies) readfree.me
+* Sat 12/29/18/14:27:17: [minor-revise]: try store cookie after each login of douban
+* Sat 12/29/18/18:08:25: [bug-fixed]: use cookie to keep douban account stayed logged in
+* Sun 12/30/18/01:27:49: [feature]: check status of readfree account
+* Sun 12/30/18/08:45:59: [feature]: add delete_history function to readfree.py
+* Mon 12/31/18/13:28:52: [new feature] readfree parse book info
+```
