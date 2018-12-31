@@ -7,3 +7,4 @@
 * Sun 12/30/18/08:45:59: [feature]: add delete_history function to readfree.py
 * Mon 12/31/18/13:28:52: [new feature] readfree parse book info
 * Mon 12/31/18/14:41:28: [new feature]: add post_status function to douban.py
+* Mon 12/31/18/22:34:30: [new file]: add 2019-progress script to updating year progress to douban.com
