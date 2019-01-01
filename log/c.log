@@ -10,3 +10,4 @@
 * Mon 12/31/18/22:34:30: [new file]: add 2019-progress script to updating year progress to douban.com
 * Tue 01/01/19/15:46:37: [update] README.md with a simple intro on readfree/__pycache__ readfree/conf.d readfree/daily_sign.py readfree/images readfree/ocr.py readfree/readfree.py readfree/testing.py
 * Wed 01/02/19/07:11:12: [new file]: add daemon bash for daily_sign readfree
+* Wed 01/02/19/07:18:41: [minor-revise]: add time printing to daily_sign for debugging

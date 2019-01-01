@@ -54,7 +54,7 @@ Aux().awesome_print(rf.parse_single_book("http://readfree.me/book/30222786/"))
 
 ### Contact 
 
-[<p align="center">[<img src="media/route.png" width=321/></p>](mailto:ssrzz@pm.me)
+<p align="center">[<img src="media/route.png" width=321/></p>](mailto:ssrzz@pm.me)
 
 
 
