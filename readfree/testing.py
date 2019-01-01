@@ -2,18 +2,23 @@ import pickle
 import requests
 from urllib.request import urlretrieve
 import sys
-from readfree import Readfree
+from readfree import Readfree, Aux
 from pprint import pprint
 
 
 rf = Readfree()
-rf.parse_single_book("hosi≠")
-# rf.parse_hot_books()
+booklink = "http://readfree.me/book/26664095/"
+booklink = "http://readfree.me/book/30222786/"
+# booklink = "http://readfree.me/book/DIY124328/" # 格雷厄姆
+# booklink = "http://readfree.me/book/DIY107221/" # 海棠依旧 6 
+Aux().awesome_print(rf.parse_single_book(booklink))
+# rf.parse_hot_books(30)
+
+
+# pprint(rf.get_account_info())
+# session = rf.save_cookie_login()
+
 sys.exit(0)
-
-
-pprint(rf.get_account_info())
-session = rf.save_cookie_login()
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Inter Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome",

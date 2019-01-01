@@ -9,7 +9,7 @@ from pprint import pprint
 
 
 class Readfree:
-    def __init__(self, account_json='/user/local/info/readfree.json'):
+    def __init__(self, account_json='/usr/local/info/readfree.json'):
         self.account_json = account_json
         self.mainpage = "http://readfree.me"
         self.headers = {
@@ -19,7 +19,7 @@ class Readfree:
 
     def is_login(self):
         # return either False or a session with cookie loaded
-        cookie_path = 'conf.d/cookies.dat'
+        cookie_path = '/usr/local/info/rfcookies.dat'
         if not os.path.exists(cookie_path):
             return False
 
@@ -91,7 +91,7 @@ class Readfree:
         if "/accounts/logout/" in r_post.text:
             print("Login SUCCEED.")
             # save cookies to local
-            with open('conf.d/cookies.dat', 'wb') as f:
+            with open('/usr/local/info/cookies.dat', 'wb') as f:
                 pickle.dump(session.cookies._cookies, f)
         return session
 
@@ -116,21 +116,28 @@ class Readfree:
 
     def parse_hot_books(self, pills=7):
         '''parse all the books on current pabe'''
-        s = self.s
-        hot7 = self.mainpage + "/rank/" + str(pills)
-        soup = BeautifulSoup(s.get(hot7).text, 'lxml')
-        for item in soup.findAll('a', {'class':'pjax'}):
-            book_name = item.text.strip()
-            if book_name: print(book_name)
-            print(item.attrs)
+        hot_page = self.mainpage + "/rank/" + str(pills)
+        soup = BeautifulSoup(self.s.get(hot_page).text, 'lxml')
+        for item in soup.findAll('div', {'class':'book-info'}):
+            book_link = self.mainpage + item.find("a", {"class": "pjax"}).attrs['href']
+            Aux().awesome_print(self.parse_single_book(book_link))
+            print("\n")
+
 
     def parse_single_book(self, b_link):
         ''' parse info: book name, score ..
+        :rtype: dictionary 
         '''
-        s = self.s
-        soup = BeautifulSoup(s.get("http://readfree.me/book/30242320/").text, 'lxml')
-        for item in soup.findAll('span'):
-            print(item)
+        infos = {}
+        soup = BeautifulSoup(self.s.get(b_link).text, 'lxml')
+        infos['name'] = soup.find('a', {"class":"link-search"}).text.strip()
+        infos['author'] = soup.find('a', {"class":"z-link-search"}).text.strip()
+        douban_link = soup.find('a', href=re.compile("http://book.douban.com/subject/.*"))
+        infos['rate'] = Aux().douban_rate(douban_link.attrs['href']) if douban_link else 'DIY'
+        infos['publisher'] = soup.find('small').text if douban_link else "None"
+        infos['introduction'] = soup.find('pre').text
+        infos['link'] = b_link
+        return infos
 
 
 
@@ -166,6 +173,53 @@ class Readfree:
         if counter == 0:  # no more history
             return
         self.delete_history(action, n - counter)
+
+
+class Aux:
+    '''Auxiliary class containing methods for better readability 
+    '''
+    def check_contain_chinese(self, check_str):
+        '''
+        :itype: str
+        :rtype: boolean 
+        '''
+        for ch in check_str:#.decode('utf-8'):
+            if u'\u4e00' <= ch <= u'\u9fff':
+                return True
+        return False
+
+
+    def awesome_print(self, bookinfos):
+        '''
+        :itype: dictionary
+        :rtype: None
+        '''
+        chunk_size = 50 if self.check_contain_chinese(bookinfos['introduction']) else 100
+        for k in sorted(bookinfos, key=len):
+            v = bookinfos[k].replace("\n", "").replace("\r", "")
+            if len(v) < chunk_size:
+                print('{:<15}: {:<20}'.format(k, bookinfos[k]))
+            else:
+                print('{:<15}: {:<20}'.format(k, v[:chunk_size]))
+                for i in range(chunk_size, len(v), chunk_size):
+                    # print(v[i:i+chunk_size])
+                    print('{:<15}  {:<20}'.format(' ', v[i:i+chunk_size]))
+
+
+    def douban_rate(self, booklink):
+        """ The rate and vote numbers are inaccurate from the original link
+        :itype: url link 
+        :rtype: str ([float, str].join(/))
+        """
+        try:
+            soup = BeautifulSoup(requests.Session().get(booklink).text, 'lxml')
+            rate = soup.find("strong", {"class": "ll rating_num "}).text.strip()
+            vote = soup.find("a", {"class": "rating_people"}).text.strip()
+            return str(rate) + " / " + vote
+        except Exception as e:
+            return "Not enough rate"
+
+
 
 
 if __name__ == '__main__':
