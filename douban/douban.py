@@ -103,11 +103,7 @@ class Douban:
     def post_status(self, content):
         ''' For now, only pure text status is support
         '''
-        ck_value = BeautifulSoup(
-            self.session.get(
-                self.mainpage).text, 'lxml').find(
-            "input", {
-                "name": "ck"})['value'].strip()
+        ck_value = self.session.cookies['ck']
         # files = {'media': open('images/captcha.jpg', 'rb').read()}
         # img=open('images/captcha.jpg', 'rb').read()
         self.session.post(self.mainpage, data={'ck':ck_value, 'comment': content})

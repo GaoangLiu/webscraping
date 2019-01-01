@@ -4,7 +4,7 @@ Python Web Scraping Notes
 
 <p align="center"><img src="media/readfree.png" width=400/></p>
 
- [readfree](http://readfree.me) is a book sharing website that allows users to push `.mobi/.epub/.pdf` formated books to Kindle. Every registered user can download books freely from this website, as long as they have enough credits, which can be earned by either donating 10 CNY ($ 1.5) to the website owner or by signing in each day. 
+ [readfree](http://readfree.me) is a book sharing website that allows users to push `.mobi/.epub/.pdf` formated books to Kindle. Every registered user can download books freely from this website, as long as they have enough credits, which can be earned by either donating 10CNY(1.5$) to the website owner or by signing in each day. 
 
 I was attracted by webs-craping recently (2018-12), so the idea came to me that maybe I can write a script to automatically login the website each day to earn more credits, although I've donated 10 CNY to the owner in exchange of 1000 credits.
 
@@ -54,7 +54,7 @@ Aux().awesome_print(rf.parse_single_book("http://readfree.me/book/30222786/"))
 
 ### Contact 
 
-<p align="center">[<img src="media/route.png" width=321/>](mailto:ssrzz@pm.me)</p>
+[<p align="center">[<img src="media/route.png" width=321/></p>](mailto:ssrzz@pm.me)
 
 
 
