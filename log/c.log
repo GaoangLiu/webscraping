@@ -11,3 +11,4 @@
 * Tue 01/01/19/15:46:37: [update] README.md with a simple intro on readfree/__pycache__ readfree/conf.d readfree/daily_sign.py readfree/images readfree/ocr.py readfree/readfree.py readfree/testing.py
 * Wed 01/02/19/07:11:12: [new file]: add daemon bash for daily_sign readfree
 * Wed 01/02/19/07:18:41: [minor-revise]: add time printing to daily_sign for debugging
+* Thu 01/03/19/10:45:56: [new feature] posting images to douban.com is possible with selenium (dbwebdriver.py)

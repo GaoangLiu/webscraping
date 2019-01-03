@@ -1,33 +1,34 @@
 Python Web Scraping Notes
 
-## Scraping http://readfree.me
+## Earning credits from [readfree.me](http://readfree.me)
 
-<p align="center"><img src="media/readfree.png" width=400/></p>
+ [readfree](http://readfree.me) is a book sharing website permitting users to push `.mobi/.epub/.pdf` formated books to Kindle or devices with Kindle installed. Every registered user can download books from it, as long as they have enough credits, which are vitual coins earned by either donating 10CNY(1.5$) to the website owner or by signing in each day. 
 
- [readfree](http://readfree.me) is a book sharing website that allows users to push `.mobi/.epub/.pdf` formated books to Kindle. Every registered user can download books freely from this website, as long as they have enough credits, which can be earned by either donating 10CNY(1.5$) to the website owner or by signing in each day. 
+For those who wish to **download books without donating money** may found this repo useful. The very original intention is seeking a method to acquire more credits without opening my browser each day. This can be achieved smoothly with Python `requests`  + `urllib`, as shown in the codes ([readfree.py](./readfree/readfree.py)) . 
 
-I was attracted by webs-craping recently (2018-12), so the idea came to me that maybe I can write a script to automatically login the website each day to earn more credits, although I've donated 10 CNY to the owner in exchange of 1000 credits.
+The idea is simple: 1. Log in my account -> 2. save cookies locally -> 3. load cookies and visit the webpage in background everyday. The login part is easy to implement, the captcha-recognizing thing, however, is the most difficult part and remains incompetent (`tesseract` is helpful but the recognizing result is unsatisfactory). Training  `tesseract` for better rate is a great idea, but beyong my original intention to keep things simple and convenient. 
 
-The login part is easy to implement with a few lines of Python3 code, even though the captcha-recognizing part is difficult and remains incompetent. I soon extend the script for parsing more information from the website, such as acquiring a list of books information (book name, author, publish, rates and abstract) from the hot page.  
+I also extend the script with two subroutines to search more information from the website, such as checking out the hot books or getting info (book name, author, publisher, rating and introduction) of a single book. 
 
-### What it can do ?
+### Functionalities
 
 * login [readfree](http://readfree.me) daily
 * parse hot books information
-* parse user account information
+* parse single book information
 
-### How to use it ?
-1. The account name and password are stored in a `.json`  file, e.g., /usr/local/info/account.json. This json file will be loaded creating each object: 
+### Usage
 
-    ```pyth
-   readfree = Readfree('/the/path/to/my/accout/json/')
+1. The account name and password are stored in a `.json`  file, e.g., /usr/local/info/account.json. This file will be loaded on creating a `Readfree` object: 
+
+    ```python
+      readfree = Readfree('/the/path/to/my_accout.json')
     ```
 
-2. A local path must be specified to store cookies so we can keep logged in until the cookies turn invalid. Change the path in `is_login()` method:
+2. A local path must be specified to store cookies so we can keep logged in until the cookies turn invalid. Revise the path in`is_login()` in whatever way you see fit:
 
    ```python
    def is_login():
-       cookie_path='/ur/cookie/path/'
+       cookie_path='/your/cookie/path/'
        ...
    ```
 
@@ -50,11 +51,42 @@ Aux().awesome_print(rf.parse_single_book("http://readfree.me/book/30222786/"))
 
 
 
+## Python [豆瓣](http://www.douban.com) Tool
+
+By now (02/01/2019), the API service of [douban](http://www.douban.com) is still under maintainence and remain closed to personal usage. 
+
+This repo provides **two** alternative ways to interact with douban:
+
+1. `requests` + `urllib` to simulate account login and to post pure-text status 
+2. `selenium` + headless `chromediver`  to post text and media
+
+Both methods rely on cookies to avoid repeat login. The `webdriver` way is recommended since it supports images uploading while the first way (`requests`) only supports posting pure text status. 
+
+### Examples
+
+```python
+# To post a status 
+python3 douban.py 'sent from CentOS 7.0 terminal' # or,
+python3 dbwebdriver.py 'sent from Ubuntu 18.10 termianl'
+# To post status with (at most 9) images 
+
+python3 dbwebdriver.py 'sent from Ubuntu 18.10 termianl' /images/1.jpg /images/2.jpg # or,
+# The order of text and images does not matter
+pythonn3 dbwebdriver.py 'How are you, guys? ' images/googmorning.jpg '\nI feel great today' images/self.png
+```
 
 
-### Contact 
 
-<p align="center">[<img src="media/route.png" width=321/></p>](mailto:ssrzz@pm.me)
+### Notes
+
+* On first run of `dbwebdriver.py`, you will have to login your account manually to cache cookies, which can be duplicated to other devices and utilized with no further login requirement.   
+* The `chromedriver` version has to match the chrome version on your device, otherwise the program may crash. You can find on [chomedriver from chrome](http://chromedriver.chromium.org/downloads) for the right version.  More mirrors of chromedriver can be found [here](https://npm.taobao.org/). 
+
+
+
+### Contact
+
+[<p align="center"><img src="media/route.png" width=321/></p>](mailto:ssrzz@pm.me)
 
 
 
