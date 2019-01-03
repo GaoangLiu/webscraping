@@ -6,7 +6,7 @@ Python Web Scraping Notes
 
 For those who wish to **download books without donating money** may found this repo useful. The very original intention is seeking a method to acquire more credits without opening my browser each day. This can be achieved smoothly with Python `requests`  + `urllib`, as shown in the codes ([readfree.py](./readfree/readfree.py)) . 
 
-The idea is simple: 1. Log in my account -> 2. save cookies locally -> 3. load cookies and visit the webpage in background everyday. The login part is easy to implement, the captcha-recognizing thing, however, is the most difficult part and remains incompetent (`tesseract` is helpful but the recognizing result is unsatisfactory). Training  `tesseract` for better rate is a great idea, but beyong my original intention to keep things simple and convenient. 
+The idea is simple: 1. Log in my account -> 2. save cookies locally -> 3. load cookies and visit the webpage in background everyday. The login part is easy to implement, the captcha-recognizing thing, however, is most difficult and remains incompetent (`tesseract` is helpful but the recognizing result is unsatisfactory). Training  `tesseract` for better rate is a great idea, but beyong my original intention of keeping things simple and convenient. 
 
 I also extend the script with two subroutines to search more information from the website, such as checking out the hot books or getting info (book name, author, publisher, rating and introduction) of a single book. 
 
@@ -21,7 +21,7 @@ I also extend the script with two subroutines to search more information from th
 1. The account name and password are stored in a `.json`  file, e.g., /usr/local/info/account.json. This file will be loaded on creating a `Readfree` object: 
 
     ```python
-      readfree = Readfree('/the/path/to/my_accout.json')
+    readfree = Readfree('/the/path/to/my_accout.json')
     ```
 
 2. A local path must be specified to store cookies so we can keep logged in until the cookies turn invalid. Revise the path in`is_login()` in whatever way you see fit:
@@ -43,8 +43,9 @@ print(rf.get_account_info()) # will print out basic infos on user
 <p align="center"><img src="media/accountinfo.png" width=400/></p>
 
 ```python
-Aux().awesome_print(rf.parse_single_book("http://readfree.me/book/30222786/"))
-# print info on book "Bad Blood" 
+a_book_link = "http://readfree.me/book/30222786/"
+Aux().awesome_print(rf.parse_single_book(a_book_link))
+# print info of book "Bad Blood" 
 ```
 
 <p align="center"><img src="media/badblood.png" width=800/></p>
@@ -68,11 +69,11 @@ Both methods rely on cookies to avoid repeat login. The `webdriver` way is recom
 # To post a status 
 python3 douban.py 'sent from CentOS 7.0 terminal' # or,
 python3 dbwebdriver.py 'sent from Ubuntu 18.10 termianl'
-# To post status with (at most 9) images 
 
+# To post status with (at most 9) images 
 python3 dbwebdriver.py 'sent from Ubuntu 18.10 termianl' /images/1.jpg /images/2.jpg # or,
 # The order of text and images does not matter
-pythonn3 dbwebdriver.py 'How are you, guys? ' images/googmorning.jpg '\nI feel great today' images/self.png
+pythonn3 dbwebdriver.py 'How are you, guys? ' images/googmorning.jpg '\nI feel great today' images/selfie.png
 ```
 
 

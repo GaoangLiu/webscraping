@@ -17,7 +17,6 @@ for arg in (
     'window-size=1024,768',
         '--no-sandbox'):
     options.add_argument(arg)
-driver = webdriver.Chrome(options=options)
 
 # Specify your own path to store and load cookies
 COOKIE_FILE = "/usr/local/info/cookies.pkl"
@@ -47,8 +46,8 @@ def auto_login():
     if not os.path.exists(COOKIE_FILE):
         print(">> No cookie was found, you should login with Chrome-Browser for at least once.")
         manual_login()
-    driver = webdriver.Chrome()
-    
+
+    driver = webdriver.Chrome(options=options)    
     # This is necessary to let webdriver know which cookies is required
     douburl = "https://www.douban.com/login"
     driver.get(douburl)
@@ -61,8 +60,6 @@ def auto_login():
     time.sleep(3)
     return driver
 
-auto_login()
-sys.exit(0)
 
 def post_status(status):
     cont, images = '', []
@@ -97,6 +94,6 @@ def post_status(status):
 
     # element = driver.find_element_by_name("comment")
     # element.send_keys('Ash is purest black')
+if __name__ == '__main__':
+    post_status(sys.argv[1:])
 
-
-post_status(sys.argv[1:])
