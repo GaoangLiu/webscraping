@@ -30,7 +30,7 @@
 
 可以看到字符甚至是加粗的，这对于我们来说是一个好消息。一个非常直觉的想法即是提取图片相素，做少许处理，再打印到屏幕上，这一点可以借助`Image`库轻松实现。代码图如下 (图中黄色亮斑不是光标，是有意加粗的长方形字符块)：
 
-<p align="center"> <img src="images/preview_code.png" width="600" style="border-radius: 20px"/> <p>
+<p align="center"> <img src="images/preview_code.png" width="600" style="border-radius: 40px"/> <p>
 
 
 
