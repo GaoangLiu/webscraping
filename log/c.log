@@ -14,3 +14,4 @@
 * Thu 01/03/19/10:45:56: [new feature] posting images to douban.com is possible with selenium (dbwebdriver.py)
 * Thu 01/03/19/20:29:28: [revise]: rewrite douban.py / structure is more clear now
 * Fri 01/04/19/15:57:02: [new subrepo] get more uppload data for byr account
+* Fri 01/04/19/19:03:54: [new file] README.md for byr sub-repo

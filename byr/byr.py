@@ -8,6 +8,7 @@ import random
 import subprocess
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
+from PIL import Image
 
 # Specify your own path to store and load cookies
 COOKIE_FILE = "byrcookies.pkl"
@@ -31,6 +32,23 @@ def login_with_cookie():
 	return [False, None] 
 
 
+
+def preview(image_file):
+	img = Image.open(image_file)
+	width, height = img.size
+	threshold = 30
+
+	for j in range(15, height - 15):
+		for i in range(20, width - 20):
+			p = img.getpixel((i, j))
+			r, g, b = p
+			if r > threshold or g > threshold or b > threshold:
+				print(' ', end="")
+			else:
+				print('▓', end="")
+			print()
+
+
 def login():
 	# First, login with cookies 
 	session, resp = login_with_cookie()
@@ -44,6 +62,8 @@ def login():
 	captcha_link = MAIN_PAGE + soup.findAll('img')[0].attrs['src']
 	print(">> open the following link for checking captcha:", captcha_link, sep="\n")
 	urlretrieve(captcha_link, 'captcha.jpg')
+	preview('captcha.jpg')
+
 	imagehash = captcha_link.split("=")[-1]
 	imagestring = input(">> type in here the captcha value: ")
 	username = input(">> byr username: ")
