@@ -1,15 +1,15 @@
 import os
 import requests
+import subprocess
+import sys
+import pickle
+import json
 from requests.auth import AuthBase, HTTPBasicAuth
 from urllib.request import urlretrieve, urlopen
 from bs4 import BeautifulSoup
-import subprocess
 from PIL import Image
 from PIL import ImageOps
-import sys
 from ocr import OCR
-import pickle
-import json
 
 COOKIE_PATH = "/usr/local/info/dbcookie.dat"
 
@@ -19,7 +19,8 @@ class Douban:
         2. there is no such cookie file
         '''
         self.session = requests.Session()
-        self.session.headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
+        self.session.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'}
         self.mainpage = "https://www.douban.com"
 
     def is_login(self):
@@ -36,9 +37,6 @@ class Douban:
         r_get = self.session.get(self.mainpage)
         soup = BeautifulSoup(r_get.text, 'lxml')
         return 'UPLOAD_AUTH_TOKEN' in soup.text
-
-    def get_account(self):
-        return json.load(open('/usr/local/info/douban.json', 'r'))
 
     def save_cookies_login(self):
         ''' Log in account and localize cookies for further explorations.
@@ -57,7 +55,7 @@ class Douban:
             bs_get.find("img", {"id": "captcha_image"}))
         cid = bs_get.find("input", {"name": "captcha-id"})
         captcha_id = cid['value'] if cid else None
-        account = self.get_account()
+        account = json.load(open('/usr/local/info/douban.json', 'r'))
 
         params = {
             'form_email': account['email'],
@@ -75,7 +73,7 @@ class Douban:
             # save cookies to local
             with open(COOKIE_PATH, 'wb') as f:
                 pickle.dump(self.session.cookies, f)
-        return 
+        return
 
     def rec_captcha(self, captcha_items):
         ''' recognize captcha, either automatically or manually.
@@ -87,6 +85,7 @@ class Douban:
         else:
             print("🕷 There is no captcha for this login page.")
 
+
     def post_status(self, content):
         ''' For now, only pure text status is support
         '''
@@ -94,16 +93,21 @@ class Douban:
         ck_value = self.session.cookies['ck']
         # files = {'media': open('images/captcha.jpg', 'rb').read()}
         # img=open('images/captcha.jpg', 'rb').read()
-        self.session.post(self.mainpage, data={'ck':ck_value, 'comment': content})
+        self.session.post(
+            self.mainpage,
+            data={
+                'ck': ck_value,
+                'comment': content})
         print("🐜 status posted SUCCEED !")
 
 
 if __name__ == '__main__':
-    db = Douban()
-    db.post_status("-- sent with Python.")
+    Douban().post_status("-- sent with Python.")
 
 
-#     session = requests.Session()
+
+
+
 #     s = session.post(
 #         "https://accounts.douban.com/login",
 #         data=params)
