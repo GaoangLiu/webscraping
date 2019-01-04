@@ -1,10 +1,16 @@
 ### 记一次有意思的captcha(半自动化)识别
 
-[北邮人BT](https://bt.byr.cn) 是一个无私的网站，有趣的网站，一个造福万千IPV6用户的资源共享网站。
+[北邮人BT](https://bt.byr.cn) 是一个有趣的网站，无私的网站，一个造福万千IPV6用户的资源共享网站。
 
-下载资源会占用流量，而流量会被统计记录下来，下载过多+上传不足会严重降低分享率，分享率低到一定水平，账号就基本上GG了，注册过的手机号将不能再次注册。所以，byrbt用户的一大“乐趣”就在于刷流量：频繁大量下载免费(流量)资源来提高分享率。
+下载资源是完全免费的，但免费不意味着可以随心所欲。所有下载都会占用流量，而流量会被统计记录下来，下载过多+上传不足会严重降低分享率，分享率低到一定水平，账号就基本上GG了，与之关联的手机号将不能再次注册。所以，byrbt用户的一大“乐趣”就在于刷流量：频繁大量下载免费(免流量)资源来提高分享率。
 
 
+
+<img src="images/xun.jpeg" width="120" align="left"/> 
+但鲁迅先生曾说：如果不是因为特殊爱好，凡能交给机器自动化处理的事情，我们为什么一定要亲手做呢？
+
+
+于是，我考虑写一个脚本。
 
 `byr.py` 是 一个Python3实现的刷流量脚本，其功能一言以敝之，
 
@@ -58,7 +64,10 @@ Another example:
 
 Notes :
 
+* 运行机器需支持IPV6
+
 * `session.post(url, data=params)`时 url = "https://bt.byr.cn/takelogin.php"，而不是'https://bt.byr.cn/login.php'， 在网页源码中可以看到 action = "takelogin.php"。 url 写错将无法登录成功。
 
   <p align="center"><img src="images/takelogin.png" width="350" style="border-radius: 10px"/><p>
 
+* 脚本运行在VPS上，由于存储空间不足20G，脚本每24小时会删除已经下载的文件 [默认存储在~/Downloads/]。
