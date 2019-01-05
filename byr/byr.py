@@ -7,6 +7,7 @@ import requests
 import random
 import subprocess
 import getpass 
+import shutil
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
 from PIL import Image
@@ -32,13 +33,15 @@ def get_account():
 
 	quotas = [
 		item for item in medium.text.split() if re.search(
-			r'(\d)+', item)]
+			r'(\d+)', item)]
 
 	for i, e in enumerate(['bonus', 'invite', 'upload_rank',
 						   'ratio', 'uploaded', 'downloaded', 'seeding', 'leeching']):
 		ACCOUNT[e] = quotas[i]
-	ACCOUNT['uploaded'] += ' GB ⬆'
-	ACCOUNT['downloaded'] += ' GB ⬇'
+
+	units = re.findall(r'([GMT]B)', medium.text)		
+	ACCOUNT['uploaded'] += ' ' + units[0] + ' ⬆'
+	ACCOUNT['downloaded'] += ' ' + units[1] + ' ⬇'
 
 	return ACCOUNT
 
@@ -92,7 +95,7 @@ def login():
 	SESSION, resp = login_with_cookie()
 	if SESSION:
 		return [SESSION, resp]
-
+	SESSION = requests.Session()
 	SESSION.headers = {'User-Agent': 'Mozilla/5.0'}
 	# html = open("login.html", 'rb').read()
 	soup = BeautifulSoup(SESSION.get(LOGIN_PAGE).text, 'lxml')
@@ -127,7 +130,6 @@ def login():
 SESSION, resp = login()
 # --------------------------------------------------------------------
 
-
 def retrieve_torrent():
 	soup = BeautifulSoup(resp.text, 'lxml')
 	torrents = []
@@ -141,45 +143,67 @@ def retrieve_torrent():
 		torrents.append(torrent_name)
 	return torrents
 
+def parse_torrent(t):
+	# given a torrent, return its size in unit and a random port
+	cmd = 'transmission-show ' + t + " | grep Total"
+	size, unit = subprocess.check_output(cmd, shell=True).split()[2:4]
+	size, unit = float(size), unit.decode('utf-8')
+	port = random.randint(20000, 30000)
+	return(size, unit, port)
+
+
+def routine():
+	global resp
+	resp = SESSION.get(MAIN_PAGE)
+	torrents = retrieve_torrent()
+	_, _, free = [ u // (2**30) for u in shutil.disk_usage('/')]
+	for t in torrents:
+		if os.path.exists(t): continue
+		size, unit, port = parse_torrent(t)
+		if unit == 'MB' and free >= 1 or free >= size:
+			free -= 1 if unit == 'MB' else size 
+			os.system("transmission-cli -p " + str(port) + ' ' + t + ' &>/dev/null &')
+
 
 def download_files():
-	print(">> Terminating transmission-cli process and clean ~/Downloads/ + ../torrents/...")
+	print(">> Terminating transmission-cli & Cleaning Downloads, torrents resume...")
 	os.system("pkill -f transmission")  # terminal previous threads
 	os.system("sleep 10; rm -rf /root/Downloads/*")
 	os.system("rm -f /root/.config/transmission/torrents/*")  # removing torrents
+	os.system("rm -f /root/.config/transmission/resume/*")    # removing resumes 	
+	os.system("rm -f *.torrent")    # removing resumes 		
 
-	AVAIL_DEV = subprocess.check_output('df -h | grep "/dev/vda"', shell=True).split()[3].decode("utf-8")
-	memory = float(re.sub(r'[GM]', '', AVAIL_DEV))
-	print(">> Available memory: " + AVAIL_DEV)
+	_, _, free = [ u // (2**30) for u in shutil.disk_usage('/')]
+	print(">> Available memory: " + str(free) + ' GB')
 
 	# to clear redundant seeds
 	SESSION.get("https://bt.byr.cn/takeflush.php?id=" + str(ACCOUNT['userid']))
-	print(">> Seeds was flushed. Sleep for 10 minutes. ")
-	time.sleep(500)
+	sleep_period = 30
+	print(">> Seeds was flushed. Sleep for {:<2} seconds".format(sleep_period))
+	time.sleep(sleep_period)
 
 	for t in retrieve_torrent():
 		try:
-			cmd = 'transmission-show ' + t + " | grep Total"
-			filesize, units = subprocess.check_output(
-				cmd, shell=True).split()[2:4]
-			filesize, units = float(filesize), units.decode('utf-8')
-			print(t, filesize, units)
-
-			port = random.randint(20000, 30000)
-			cmd = "transmission-cli -p " + str(port) + " " + t + " &>/dev/null&"
-			if units == 'MB' or units == 'GB' and filesize < memory:
-				memory -= 1 if units == 'MB' else filesize
+			size, unit, port = parse_torrent(t)
+			if unit == 'MB' or unit == 'GB' and size < free:
+				free -= 1 if unit == 'MB' else size
 				print(">> Downloading " + t)
-				os.system(cmd)
+				os.system("transmission-cli -p " + str(port) + " " + t + " &>/dev/null&")
 		except Exception as e:
 			print(e)
 			continue
 
 
+cter = 1000
 while True:
+	sleep_period = 1800 
 	try:
-		download_files()
-		time.sleep(3600 * 12)
+		if cter >= 24 * 3600 // sleep_period:
+			cter = 0 
+			download_files()
+		routine()
+		cter += 1
+		time.sleep(sleep_period)
 	except Exception as e:
 		print("WHILE TRUE exception : ")
 		print(e)

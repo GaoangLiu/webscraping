@@ -12,7 +12,7 @@ booklink = "http://readfree.me/book/30222786/"
 # booklink = "http://readfree.me/book/DIY124328/" # 格雷厄姆
 # booklink = "http://readfree.me/book/DIY107221/" # 海棠依旧 6 
 Aux().awesome_print(rf.parse_single_book(booklink))
-# rf.parse_hot_books(30)
+rf.parse_hot_books(30)
 
 
 # pprint(rf.get_account_info())

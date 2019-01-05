@@ -7,11 +7,11 @@
 
 
 <img src="images/xun.jpeg" width="120" align="left"/> 
-但鲁迅先生曾说：如果不是因为特殊爱好，凡能交给机器自动化处理的事情，我们为什么一定要亲手做呢？于是，我考虑写一个脚本。
+但鲁迅先生曾说：如果不是特殊爱好，凡能交给机器自动化处理的事情，我们为什么一定要亲手做呢？于是，我考虑写一个脚本。
 
 
 
-[`byr.py`](./byr.py) 是 一个Python3实现的刷流量脚本，其功能一言以敝之，
+[`byr.py`](./byr.py) 是 一个Python3实现的自动刷流量脚本，其功能一言以敝之，
 
 > 自动登录byrbt网站  -> 搜索首页的免费资源(一般为5条) -> 下载对应的torrent文件 -> 判断资源大小 -> 判断系统是否有足够的存储空间 -> 下载资源并做种 -> 24小时后循环此流程。 
 >
@@ -21,16 +21,18 @@
 
 ### Implementation
 
-* 登陆网站依赖`requests`/`pickle`/`bs4`库，第一登录需要识别验证码(capthca)，登录成功后会保存cookies，之后再登录可直接读取cookies免密码登录
+* 登陆网站依赖`requests`/`pickle`/`bs4`库，第一次登录需要识别验证码(capthca)，登录成功后会保存cookies，之后再登录可直接读取cookies免密码登录
 * 免费资源分析`session.findAll(...)` 
 *  torrent文件下载 `session.get(torrentlink, allow_redirects=True)` 
 * 资源大小判断 `transmission-show` (under Linux / MacOS) 
 * 系统空间 `df -h` (Linux基本命令)
 * 下载软件 `transmission-cli`
 
-​	困难的地方在于captcha识别，`tesseract`的识别效果并不理想，通过神经网络或SVM训练来实现全自动识别，对我这个新手而言有点复杂。考虑到captcha只会在第一次(或者很多天后的第一次)登录时才会遇到，如果有一个**快速打印 captcha 图片并保持一定的清晰度**的方法，对于 Linux/MacOS 终端使用者来说，额外的工作量也就是几秒钟的事情: 快速从屏幕上读取几个字符，然后输入给`input`。 
 
-​	经过几次试验，发现byrbt的验证码比较规整，由6位字符(字母+数字)组成，且字符相对于背景噪点比较清楚，并垂直集中于图片中间，比下图
+
+困难的地方在于captcha识别，`tesseract`的识别效果并不理想，通过神经网络或SVM训练来实现全自动识别，对我这个新手而言有点复杂。考虑到captcha只会在第一次(或者很多天后的第一次)登录时才会遇到，如果有一个**快速打印 captcha 图片并保持一定的清晰度**的方法，对于 Linux/MacOS 终端使用者来说，额外的工作量也就是几秒钟的事情: 快速从屏幕上读取几个字符，然后输入给`input`。 
+
+经过几次试验，发现byrbt的验证码比较规整，由6位字符(字母+数字)组成，且字符相对于背景噪点比较清楚，并垂直集中于图片中间，如下图
 
 <p align="center"><img src="images/captcha_ex.png" style="border-radius: 10px"/> <p> 
 
