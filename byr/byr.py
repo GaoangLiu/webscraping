@@ -116,9 +116,7 @@ def baidu_ai_ocr(image):
 
 	preconfig(image)
 	with open('pre_fig.jpg', 'rb') as f:
-		img = f.read()
-		response = client.basicGeneral(img, {'language_type':'ENG'})
-		print(response)
+		response = client.basicGeneral(f.read(), {'language_type':'ENG'})
 		return ''.join(re.findall(r'\w', response['words_result'][0]['words'])).lower()
 
 

@@ -62,7 +62,7 @@ Another example:
 
 具体代码可见 [byr.py](./byr.py). 
 
-
+---
 
 Notes :
 
@@ -73,3 +73,15 @@ Notes :
   <p align="center"><img src="images/takelogin.png" width="350" style="border-radius: 10px"/><p>
 
 * 脚本运行在VPS上，由于存储空间不足20G，脚本每24小时会删除已经下载的文件 [默认存储在~/Downloads/]。
+
+
+
+---
+
+---
+
+Update [Jan 6 2019]:
+
+* 使用了[百度云文字识别](https://cloud.baidu.com/doc/OCR/index.html)。对于byrbt这类工整的图片识别码，baidu OCR 识别率还是非常高的，多数情况下做一下预处理，都能很快识别出来，只是偶尔会错误区分“2“与”7”。
+
+<p align="center"> <img src="images/baiduocr.png" width="600"/> <p>
