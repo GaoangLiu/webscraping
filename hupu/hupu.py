@@ -17,7 +17,7 @@ class Hupu():
     def __init__(self):
         options = Options()
         for arg in (
-            # '--headless',
+            '--headless',
             '--disable-gpu',
             'window-size=1024,768',
             '--no-sandbox',
