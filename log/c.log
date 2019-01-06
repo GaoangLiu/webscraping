@@ -22,3 +22,4 @@
 * Sun 01/06/19/10:01:52: [backup]
 * Sun 01/06/19/10:17:58: [normal-revise] use baidu api ocr to recgnoze BYR captcha
 * Sun 01/06/19/10:28:16: [update] readme.md for byr: add baidu ocr code
+* Mon 01/07/19/06:57:37: [minor update] add image-downloader to douban; revised hupu.py
