@@ -160,6 +160,7 @@ def login():
 
 # --------------------------------------------------------------------
 SESSION, resp = login()
+_, _, FREESPACE = [u // (2**30) for u in shutil.disk_usage('/')]
 # --------------------------------------------------------------------
 
 
@@ -182,13 +183,13 @@ def is_downloadable(t):
 	cmd = 'transmission-show ' + t + " | grep Total"
 	size, unit = subprocess.check_output(cmd, shell=True).split()[2:4]
 	size, unit = float(size), unit.decode('utf-8')
-	_, _, free = [u // (2**30) for u in shutil.disk_usage('/')]
+	global FREESPACE
 
-	if unit == 'MB' and free >= 1:
-		free -= 1
+	if unit == 'MB' and FREESPACE >= 1:
+		FREESPACE -= 1
 		return True
-	elif unit == 'GB' and free >= size:
-		free -= size
+	elif unit == 'GB' and FREESPACE >= size + 1:  # leave at least 1G for system
+		FREESPACE -= size
 		return True
 	return False
    
@@ -210,7 +211,7 @@ def routine():
 	global resp
 	resp = SESSION.get(MAIN_PAGE)
 	torrents = homepage_torrents()
-	_, _, free = [u // (2**30) for u in shutil.disk_usage('/')]
+
 	for t in torrents:
 		if os.path.exists(t):
 			continue
@@ -237,8 +238,9 @@ def download_files():
 	os.system("rm -f /root/.config/transmission/resume/*")
 	os.system("rm -f *.torrent")    # removing resumes
 
-	_, _, free = [u // (2**30) for u in shutil.disk_usage('/')]
-	print(">> Available memory: " + str(free) + ' GB')
+	global FREESPACE
+	_, _, FREESPACE = [u // (2**30) for u in shutil.disk_usage('/')]
+	print(">> Available memory: " + str(FREESPACE) + ' GB')
 
 	# to clear redundant seeds
 	SESSION.get("https://bt.byr.cn/takeflush.php?id=" + str(ACCOUNT['userid']))
