@@ -25,3 +25,4 @@
 * Mon 01/07/19/06:57:37: [minor update] add image-downloader to douban; revised hupu.py
 * Tue 01/08/19/16:13:22: [bug fixed] FREESPACE is not global for byr
 * Mon 01/14/19/08:58:29: [new feature] undone yet: rlights bbs
+* Mon 01/14/19/14:20:29: [new feature] a bot for lights replies added

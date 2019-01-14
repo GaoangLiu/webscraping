@@ -8,7 +8,7 @@ import pickle, time, sys, os, re, random
 from bs4 import BeautifulSoup
 
 
-COOKIE_FILE = "wechat.pkl"
+COOKIE_FILE = "alphablant.pkl"
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -102,22 +102,20 @@ class Hupu():
         commentary = self.copy_reply(url)
         self.post_reply(url, commentary)
 
-    # def bbs_rlights(self):
-    #     url = 'https://bbs.hupu.com/25106450-67.html#355170'
-    #     url = 'https://bbs.hupu.com/25108369-3.html#359860'
-    #     self.driver.get(url)
-    #     time.sleep(0.5)
-    #     tid = 0
-    #     soup = BeautifulSoup(self.driver.page_source, 'lxml')
-    #     for idx, div in enumerate(soup.findAll('div', {'class':'floor_box '})):
-    #         if div.a.text == 'EIenaGreco':
-    #             tid = idx 
-    #             break
-    #     time.sleep(5)
-    #     rlks = self.driver.find_elements_by_class_name("ilike_icon")
-    #     rlks[tid].click()
-    #     time.sleep(3)
-    #     # print(self.driver.page_source)
+    def bbs_rlights(self):
+        url = 'https://bbs.hupu.com/25110537-12.html#84875'
+        self.driver.get(url)
+        time.sleep(0.5)
+        tid = 0
+        soup = BeautifulSoup(self.driver.page_source, 'lxml')
+        for idx, div in enumerate(soup.findAll('div', {'class':'floor_box '})):
+            if div.a.text == 'EIenaGreco':
+                tid = idx 
+                break
+        time.sleep(5)
+        rlks = self.driver.find_elements_by_class_name("ilike_icon")
+        rlks[tid].click()
+        # print(self.driver.page_source)
 
 
 
