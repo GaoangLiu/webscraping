@@ -37,7 +37,8 @@ def get_status_image(source):
 		urlretrieve(src, IMAGE_PATH+imgid)
 
 source = 'https://www.douban.com/people/86594717/statuses'
-for p in range(50, 81):
+source = 'https://www.douban.com/people/kusoing/statuses'
+for p in range(81, 100):
 	next_s = source+'?p='+str(p)
 	get_status_image(next_s)
 	time.sleep(3)

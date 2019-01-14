@@ -8,7 +8,7 @@ import pickle, time, sys, os, re, random
 from bs4 import BeautifulSoup
 
 
-COOKIE_FILE = "hupu.pkl"
+COOKIE_FILE = "wechat.pkl"
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -17,14 +17,14 @@ class Hupu():
     def __init__(self):
         options = Options()
         for arg in (
-            '--headless',
+            # '--headless',
             '--disable-gpu',
             # 'window-size=1024,768',
             '--no-sandbox',
                 'disable-infobars'):
             options.add_argument(arg)
         self.driver = webdriver.Chrome(options=options)
-        # self.driver.set_page_load_timeout(30)
+        self.driver.set_page_load_timeout(120)
 
     def manual_login(self):
         # first time login
@@ -102,6 +102,22 @@ class Hupu():
         commentary = self.copy_reply(url)
         self.post_reply(url, commentary)
 
+    # def bbs_rlights(self):
+    #     url = 'https://bbs.hupu.com/25106450-67.html#355170'
+    #     url = 'https://bbs.hupu.com/25108369-3.html#359860'
+    #     self.driver.get(url)
+    #     time.sleep(0.5)
+    #     tid = 0
+    #     soup = BeautifulSoup(self.driver.page_source, 'lxml')
+    #     for idx, div in enumerate(soup.findAll('div', {'class':'floor_box '})):
+    #         if div.a.text == 'EIenaGreco':
+    #             tid = idx 
+    #             break
+    #     time.sleep(5)
+    #     rlks = self.driver.find_elements_by_class_name("ilike_icon")
+    #     rlks[tid].click()
+    #     time.sleep(3)
+    #     # print(self.driver.page_source)
 
 
 
