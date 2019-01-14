@@ -1,4 +1,4 @@
-Python Web Scraping Notes
+Python codes to interact with websites by `selenium`
 
 ## Earning credits from [readfree.me](http://readfree.me)
 
@@ -82,6 +82,18 @@ pythonn3 dbwebdriver.py 'How are you, guys? ' images/googmorning.jpg '\nI feel g
 
 * On first run of `dbwebdriver.py`, you will have to login your account manually to cache cookies, which can be duplicated to other devices and utilized with no further login requirement.   
 * The `chromedriver` version has to match the chrome version on your device, otherwise the program may crash. You can find on [chomedriver from chrome](http://chromedriver.chromium.org/downloads) for the right version.  More mirrors of chromedriver can be found [here](https://npm.taobao.org/). 
+
+
+
+## [Hupu](https://www.hupu.com) auto checkin and post replies
+
+* `hupu/hupu.py` , support 
+  * login account and save cookies to local disk
+  * note-posting 
+  * post replies to articles
+
+* `hupu/rlights-bot.py`
+  * win more reputations by lightening up replies made by the target account
 
 
 

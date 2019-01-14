@@ -1,0 +1,50 @@
+# HTTP Cookie File downloaded with cookies.txt by Genuinous @genuinous
+# This file can be used by wget, curl, aria2c and other standard compliant tools.
+# Usage Examples:
+#   1) wget -x --load-cookies cookies.txt "https://my.hupu.com/Elena_Greco_"
+#   2) curl --cookie cookies.txt "https://my.hupu.com/Elena_Greco_"
+#   3) aria2c --load-cookies cookies.txt "https://my.hupu.com/Elena_Greco_"
+#
+my.hupu.com	FALSE	/198479117418740	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+my.hupu.com	FALSE	/211492451111796	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+my.hupu.com	FALSE	/41316013113719	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+my.hupu.com	FALSE	/64295831038900	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+my.hupu.com	FALSE	/Elena_Greco_	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+my.hupu.com	FALSE	/Elena_Greco	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+passport.hupu.com	FALSE	/passport/	FALSE	0	JSESSIONID	E094791BF8856E07A1062D3B8784C640
+passport.hupu.com	FALSE	/ucenter/	FALSE	0	JSESSIONID	6C76F3F444F7B19E0262D63563889B62
+my.hupu.com	FALSE	/public	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+m.hupu.com	FALSE	/bbs	FALSE	1555196118	m_id	qJuXqZSazpnX1cRim2ydl55qaZGVwpSUmWtpcQ%3D%3D
+m.hupu.com	FALSE	/bbs	FALSE	11008220118	tongdun_token	hupu-36668327-1547420117ffuh65l5pi1e
+my.hupu.com	FALSE	/	FALSE	0	PHPSESSID	8rov5aqrj2ifug16rtss7d15v1
+.hupu.com	TRUE	/	FALSE	1862778581	_dacevid3	4104c77e.1694.66a4.6226.1a1911880a97
+my.hupu.com	FALSE	/	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+.hupu.com	TRUE	/	FALSE	1831242607	_HUPUSSOID	4c094bc2-1775-4dd2-95f7-2e31eb8bb437
+passport.hupu.com	FALSE	/	FALSE	1862778609	_uab_collina	154741860934231524743614
+passport.hupu.com	FALSE	/	FALSE	1578954618	_fmdata	YMGp2gsAfxKZVek6VyYKuQoSTwKlvjOKCIeh5AUmpxJpbzUMWXWV3Yfdwl%2FwVDWlBX%2BuLOWerF2MsOIjfq2dgpUsq189D1atOcJklxxpsOI%3D
+passport.hupu.com	FALSE	/	FALSE	1578954612	_umdata	G142603BB385AE2935B1B13A2D5D8E3E6C1CC70
+.hupu.com	TRUE	/	FALSE	1578954615	_CLT	918ebe7bb324d8673460f7af1d701a5c
+.hupu.com	TRUE	/	FALSE	1550010634	u	36668327|R2VudGxlMzM0OA==|20a8|a6648392064fffca1b0c6bd80a9d14c6|064fffca1b0c6bd8|aHVwdV8xYTE3Zjc4ODAzYWE0ZTMy
+.hupu.com	TRUE	/	FALSE	1550010634	us	02a9f36d99492904e84aaa0b7f6f1b0aac835930ea9827cb6310fc985c5b83026d00ab6ea0558b6483caa4e9432da6d56561073fba14e8ed40f02114771e8571
+passport.hupu.com	FALSE	/	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+bbs.hupu.com	FALSE	/	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+bbs.hupu.com	FALSE	/	FALSE	0	PHPSESSID	3848f997e611c58ebd9b18299b337b56
+m.hupu.com	FALSE	/	FALSE	1547481600	app_cookie	1547420117
+.hupu.com	TRUE	/	FALSE	1610492118	__dacevid3	0x017768ecb23caa2a
+.hupu.com	TRUE	/	FALSE	0	__dacemvst	6c1a2e00.45274530
+.hupu.com	TRUE	/	FALSE	1547481599	sajssdk_2015_cross_new_user	1
+.hupu.com	TRUE	/	FALSE	7854620126	sensorsdata2015jssdkcross	%7B%22distinct_id%22%3A%22168496d4c99cc8-05b4165f33cf6d-10346654-1024000-168496d4c9a6b2%22%2C%22%24device_id%22%3A%22168496d4c99cc8-05b4165f33cf6d-10346654-1024000-168496d4c9a6b2%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E8%87%AA%E7%84%B6%E6%90%9C%E7%B4%A2%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22https%3A%2F%2Fwww.google.com%2F%22%2C%22%24latest_referrer_host%22%3A%22www.google.com%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC%22%7D%7D
+.m.hupu.com	TRUE	/	FALSE	1578956127	Hm_lvt_abb0c7fb3fb595c51dc99849b10830bd	1547420127
+.m.hupu.com	TRUE	/	FALSE	0	Hm_lpvt_abb0c7fb3fb595c51dc99849b10830bd	1547420127
+.hupu.com	TRUE	/	FALSE	1579064111	ua	55265775
+bbs.hupu.com	FALSE	/	FALSE	0	amvid	a5a486caced8e267c9c01e23072dfc80
+.bbs.hupu.com	TRUE	/	FALSE	1552626523	lastvisit	2234%091547442522%09%2Fajax%2Flights.ajax.php%3F
+.bbs.hupu.com	TRUE	/	FALSE	1578982200	Hm_lvt_39fc58a7ab8a311f2f6ca4dc1222a96e	1547444448,1547444553,1547446061,1547446200
+.bbs.hupu.com	TRUE	/	FALSE	0	Hm_lpvt_39fc58a7ab8a311f2f6ca4dc1222a96e	1547446200
+bbs.hupu.com	FALSE	/	FALSE	1578982225	_fmdata	%2B2r1YdrPK8h4svvEybJJirFzCJOVtegXtgebkkxGtoKEgg4NzokQ3EXPNhXbP6S73PmADwq6DEduECXltmRw4EKQ0Vt9KvWRWnizjenUKk4%3D
+www.hupu.com	FALSE	/	FALSE	0	_cnzz_CV30020080	buzi_cookie%7C4104c77e.1694.66a4.6226.1a1911880a97%7C-1
+www-backend.hupu.com	FALSE	/	FALSE	0	t7fs8qvg48ajaifo2a3i4vpmd5	1pHSjGyQdWYHcDGBTkey0X1dBNKJoTbNxuwPJfiVoHYEfZ06hKQi8pYnjsSlzT86FykI9pVPsio7tTgJJXCHf%2BWioesiloaOGC1rMAXhh54ytnnOmXhZ0OQyZ%2BDl85vvBSJoH7jCZGMen1b%2F0exjxYrlECD8uhspYHhWAHDZdoKe4tPER%2BL1oBlFZfYzdCVCEnD5ZXnD4y4m9cJ4xg%3D%3D
+www-backend.hupu.com	FALSE	/	FALSE	0	hcsf	uolc7nv61ure36edoe52vlrh55
+www-backend.hupu.com	FALSE	/	FALSE	0	uolc7nv61ure36edoe52vlrh55	1pHSjGyQdWYHcDGBTkey0X1dBNKJoTbNxuwPJfiVoHYEfZ06hKQi8pYnjsSlzT86FykI9pVPsio7tTgJJXCHf%2BWioesiloaOGC1rMAXhh54ytnnOmXhZ0OQyZ%2BDl85vvBSJoH7jCZGMen1b%2F0exjxYrlECD8uhspYHhWAHDZdoKe4tPER%2BL1oBlFZfYzdCVCEnD5ZXnD4y4m9cJ4xg%3D%3D
+.hupu.com	TRUE	/	FALSE	1547448569	__dacevst	0101f170.3b9cf3fa|1547448569770
+my.hupu.com	FALSE	/	FALSE	1578982770	_fmdata	YMGp2gsAfxKZVek6VyYKuQoSTwKlvjOKCIeh5AUmpxJpbzUMWXWV3Yfdwl%2FwVDWlYJtOx7aNyHjnDMFtYueTsxFN1TtU02zFJtTjO2gqZn0%3D

@@ -13,6 +13,8 @@ while True:
 		print(datetime.datetime.now(), 'Normal')				
 		hp.driver.get('https://my.hupu.com/')
 		hp.water_bbs()
+		time.sleep(5)
+		break
 		time.sleep(300)
 	except Exception as e:
 		print(e)

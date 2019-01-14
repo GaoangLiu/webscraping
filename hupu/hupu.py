@@ -8,7 +8,7 @@ import pickle, time, sys, os, re, random
 from bs4 import BeautifulSoup
 
 
-COOKIE_FILE = "alphablant.pkl"
+COOKIE_FILE = "blutoqq.pkl"
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -19,7 +19,7 @@ class Hupu():
         for arg in (
             # '--headless',
             '--disable-gpu',
-            # 'window-size=1024,768',
+            'window-size=1024,768',
             '--no-sandbox',
                 'disable-infobars'):
             options.add_argument(arg)

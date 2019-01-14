@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import arrow 
 
 
-COOKIE_FILE = "alphablant.pkl"
+COOKIE_FILE = ""
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -29,7 +29,7 @@ class Bot():
             global COOKIE_FILE
             COOKIE_FILE = cookie
         self.driver = webdriver.Chrome(options=options)
-        self.driver.set_page_load_timeout(30)
+        self.driver.set_page_load_timeout(130)
 
     def manual_login(self):
         # first time login
@@ -89,7 +89,7 @@ class Bot():
             self.bbs_rlights(url)
 
 def three_musketeers():
-    for cf in ['ssuuoozz.pkl', 'wechat.pkl', 'alphablant.pkl']:
+    for cf in ['ssuuoozz.pkl', 'wechat.pkl', 'alphablant.pkl', 'fivec.pkl', 'blutoqq.pkl']:
         try:
             b = Bot(cf)
             b.login()
