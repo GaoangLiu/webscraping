@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import arrow 
 
 
-COOKIE_FILE = ""
+COOKIE_FILE = "elena.pkl"
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -69,7 +69,7 @@ class Bot():
         tid = 0
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
         for idx, div in enumerate(soup.findAll('div', {'class':'floor_box '})):
-            if div.a.text == 'EIenaGreco':
+            if div.a.text == 'ssuuoozz':
                 tid = idx 
                 break
         rlks = self.driver.find_elements_by_class_name("ilike_icon")
@@ -78,7 +78,7 @@ class Bot():
         # print(url, arrow.now())
 
     def rlights_replies(self):
-        replypage = 'https://my.hupu.com/Elena_Greco/topic-allreply-1'
+        replypage = 'https://my.hupu.com/41316013113719/topic-allreply-1'
         self.driver.get(replypage)
         time.sleep(0.5)
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
@@ -89,7 +89,7 @@ class Bot():
             self.bbs_rlights(url)
 
 def three_musketeers():
-    for cf in ['ssuuoozz.pkl', 'wechat.pkl', 'alphablant.pkl', 'fivec.pkl', 'blutoqq.pkl']:
+    for cf in ['mouse.pkl', 'bull.pkl', 'tiger.pkl', 'elenaqq.pkl', 'wechat.pkl', 'alphablant.pkl', 'fivec.pkl', 'blutoqq.pkl']:
         try:
             b = Bot(cf)
             b.login()
@@ -105,6 +105,6 @@ def three_musketeers():
 if __name__ == '__main__':
     while True:
         three_musketeers()
-        time.sleep(30)
+        time.sleep(600)
 
 

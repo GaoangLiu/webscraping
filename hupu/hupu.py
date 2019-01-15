@@ -8,7 +8,7 @@ import pickle, time, sys, os, re, random
 from bs4 import BeautifulSoup
 
 
-COOKIE_FILE = "blutoqq.pkl"
+COOKIE_FILE = "tiger.pkl"
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -17,7 +17,7 @@ class Hupu():
     def __init__(self):
         options = Options()
         for arg in (
-            # '--headless',
+            '--headless',
             '--disable-gpu',
             'window-size=1024,768',
             '--no-sandbox',
@@ -57,6 +57,7 @@ class Hupu():
         print(">> Cookies loaded")
         self.driver.get(MAINPAGE)
         print(">> Auto Login DONE")
+        # time.sleep(1000)
         return self.driver
 
     def post_notes(self, content):
@@ -95,7 +96,7 @@ class Hupu():
             text = re.sub(r'发自.*', '', text)
             replies.append(text)
 
-        return random.choice(replies[2::])
+        return random.choice(replies[2:5])
 
     def water_bbs(self):
         url = self.get_bbs_address()
