@@ -13,7 +13,7 @@ while True:
 		print(datetime.datetime.now(), 'Normal')				
 		hp.driver.get('https://my.hupu.com/')
 		hp.water_bbs()
-		time.sleep(3)
+		time.sleep(3000)
 		hp.driver.quit()
 		time.sleep(random.randint(300, 600))
 	except Exception as e:

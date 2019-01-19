@@ -12,7 +12,7 @@ import re
 
 options = Options()
 for arg in (
-    '--headless',
+    # '--headless',
     '--disable-gpu',
     'window-size=1024,768',
         '--no-sandbox'):
@@ -57,7 +57,7 @@ def auto_login():
     for cookie in cookies:
         driver.add_cookie(cookie)
     driver.get(douburl)
-    time.sleep(3)
+    time.sleep(0.5)
     return driver
 
 
@@ -92,8 +92,53 @@ def post_status(status):
     print(">> post SUCCEED !")
     driver.quit()
 
-    # element = driver.find_element_by_name("comment")
-    # element.send_keys('Ash is purest black')
+def fake_rating_num(r):
+    if r <= 4:
+        return 1
+    elif r <= 6:
+        return 2
+    elif r <= 8:
+        return 3
+    elif r <= 9:
+        return 4
+    else:
+        return 5
+
+
+
+def rate_movie(rate, url):
+    # rate \in [1, 5]
+    driver = auto_login()
+    driver.get(url)
+    if '我看过这部电影' in driver.page_source: 
+        driver.quit()
+        return 
+
+    copied_reply = driver.find_element_by_class_name('short').text
+    rate_num = driver.find_element_by_class_name('rating_num').text
+    rate_num = fake_rating_num(float(rate_num))
+    print(rate_num)
+
+    driver.find_elements_by_class_name('collect_btn')[1].click()
+    time.sleep(0.5)
+    # print(driver.page_source)
+
+    stars = 'star' + str(rate_num)
+    driver.find_element_by_id(stars).click()    
+    driver.find_element_by_id('comment').click()
+    driver.find_element_by_id('comment').send_keys(copied_reply)
+    driver.find_element_by_id('share-shuo').click()
+    # driver.find_element_by_xpath("//input[@name='save']").click()
+    time.sleep(5)
+
+    driver.quit()
+
+
+
 if __name__ == '__main__':
-    post_status(sys.argv[1:])
+    # post_status(sys.argv[1:])
+    url = 'https://movie.douban.com/subject/25937991/?from=showing'
+    url = 'https://movie.douban.com/subject/26425063/?tag=%E7%83%AD%E9%97%A8&from=gaia_video'
+    url = 'https://movie.douban.com/subject/30157153/?tag=%E7%83%AD%E9%97%A8&from=gaia'
+    rate_movie(3, url)
 

@@ -8,7 +8,7 @@ import pickle, time, sys, os, re, random
 from bs4 import BeautifulSoup
 
 
-COOKIE_FILE = "tiger.pkl"
+COOKIE_FILE = "hupu.pkl"
 MAINPAGE = "https://www.hupu.com"
 LOGINPAGE = "https://passport.hupu.com/pc/login"
 SPURS = 'https://bbs.hupu.com/spurs'
@@ -79,10 +79,11 @@ class Hupu():
             print('post reply failed')
 
     def get_bbs_address(self):
-        self.driver.get("https://bbs.hupu.com")
+        self.driver.get("https://www.hupu.com")
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
-        links = [l.attrs['href'] for l in soup.findAll('a', href=re.compile(r'^/\d+.html'))]
-        return "https://bbs.hupu.com" + random.choice(links[1::])
+        links = [l.attrs['href'] for l in soup.findAll('a', href=re.compile(r'^https://bbs.hupu.com/\d+.html'))]
+        # return "https://bbs.hupu.com" + random.choice(links[1::])
+        return random.choice(links[1::])        
 
 
     def copy_reply(self, url):
@@ -95,13 +96,18 @@ class Hupu():
             text = re.sub(r'引用.*发表的:', '', text)
             text = re.sub(r'发自.*', '', text)
             replies.append(text)
+        replies.sort(key=len)
+        res = random.choice(replies[0:7])
+        for kw in ('保存图片', '@', '虎扑', '官方'):
+            res = res.replace(kw, '...')
+        return res if len(res) < 77 else '这操作让人很服气的。。。'
 
-        return random.choice(replies[2:5])
 
     def water_bbs(self):
         url = self.get_bbs_address()
         commentary = self.copy_reply(url)
         self.post_reply(url, commentary)
+
 
     def bbs_rlights(self):
         url = 'https://bbs.hupu.com/25110537-12.html#84875'
@@ -117,9 +123,5 @@ class Hupu():
         rlks = self.driver.find_elements_by_class_name("ilike_icon")
         rlks[tid].click()
         # print(self.driver.page_source)
-
-
-
-
 
 

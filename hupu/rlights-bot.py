@@ -69,16 +69,17 @@ class Bot():
         tid = 0
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
         for idx, div in enumerate(soup.findAll('div', {'class':'floor_box '})):
-            if div.a.text == 'ssuuoozz':
+            if div.a.text == 'Gentle3348':
                 tid = idx 
                 break
         rlks = self.driver.find_elements_by_class_name("ilike_icon")
         if rlks:
             rlks[tid].click()
-        # print(url, arrow.now())
+        print(url, arrow.now())
+        time.sleep(1)
 
     def rlights_replies(self):
-        replypage = 'https://my.hupu.com/41316013113719/topic-allreply-1'
+        replypage = 'https://my.hupu.com/Elena_Greco_/topic-allreply-' + str(random.randint(1,6))
         self.driver.get(replypage)
         time.sleep(0.5)
         soup = BeautifulSoup(self.driver.page_source, 'lxml')
@@ -89,7 +90,7 @@ class Bot():
             self.bbs_rlights(url)
 
 def three_musketeers():
-    for cf in ['mouse.pkl', 'bull.pkl', 'tiger.pkl', 'elenaqq.pkl', 'wechat.pkl', 'alphablant.pkl', 'fivec.pkl', 'blutoqq.pkl']:
+    for cf in ['mouse.pkl', 'bull.pkl', 'tiger.pkl', 'rabbit.pkl', 'elenaqq.pkl', 'wechat.pkl', 'alphablant.pkl', 'fivec.pkl', 'blutoqq.pkl']:
         try:
             b = Bot(cf)
             b.login()

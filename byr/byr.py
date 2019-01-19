@@ -20,7 +20,7 @@ MAIN_PAGE = 'https://bt.byr.cn/'
 LOGIN_PAGE = 'https://bt.byr.cn/login.php'
 SESSION = requests.Session()
 ACCOUNT = {}
-
+targetspace = '/mnt/volume_sfo2_01/'
 
 def get_account():
 	''' user id
@@ -160,7 +160,7 @@ def login():
 
 # --------------------------------------------------------------------
 SESSION, resp = login()
-_, _, FREESPACE = [u // (2**30) for u in shutil.disk_usage('/')]
+_, _, FREESPACE = [u // (2**30) for u in shutil.disk_usage(targetspace)]
 # --------------------------------------------------------------------
 
 
@@ -233,13 +233,14 @@ def routine():
 def download_files():
 	print(">> Terminating transmission-cli & Cleaning Downloads, torrents resume...")
 	os.system("pkill -f transmission")  # terminal previous threads
-	os.system("sleep 10; rm -rf /root/Downloads/*")
+	# os.system("sleep 10; rm -rf /root/Downloads/*")
+	os.system("sleep 10; rm -rf /mnt/volume_sfo2_01/*")
 	os.system("rm -f /root/.config/transmission/torrents/*")
 	os.system("rm -f /root/.config/transmission/resume/*")
 	os.system("rm -f *.torrent")    # removing resumes
 
 	global FREESPACE
-	_, _, FREESPACE = [u // (2**30) for u in shutil.disk_usage('/')]
+	_, _, FREESPACE = [u // (2**30) for u in shutil.disk_usage(targetspace)]
 	print(">> Available memory: " + str(FREESPACE) + ' GB')
 
 	# to clear redundant seeds
@@ -255,7 +256,7 @@ def download_files():
 				print(">> downloading file from " + t)
 				with open(os.devnull, 'w') as devnull:
 					subprocess.Popen(
-						['transmission-cli', '-p', str(port), t], stdout=devnull, stderr=devnull)
+						['transmission-cli', '-w', targetspace, '-p', str(port), t], stdout=devnull, stderr=devnull)
 					# os.system("transmission-cli -p " + str(port) + " " + t + " &>/dev/null&")
 		except Exception as e:
 			print(e)
