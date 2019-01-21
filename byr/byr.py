@@ -227,7 +227,7 @@ def routine():
 			port = random.randint(20000, 30000)
 			with open(os.devnull, 'w') as devnull:
 				subprocess.Popen(
-					['transmission-cli', '-p', str(port), t], stdout=devnull, stderr=devnull)
+					['transmission-cli', '-w', targetspace, '-p', str(port), t], stdout=devnull, stderr=devnull)
 
 
 def download_files():
