@@ -1,6 +1,6 @@
 #!/usr/bash
 
 while :; do 
-	nohup python3 daily_sign.py&
+	nohup python3 rfv2.py&
 	sleep 1h
 done

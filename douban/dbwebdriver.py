@@ -9,17 +9,20 @@ import time
 import sys
 import os
 import re
+import random
+from bs4 import BeautifulSoup
 
 options = Options()
 for arg in (
-    # '--headless',
+    '--headless',
     '--disable-gpu',
     'window-size=1024,768',
-        '--no-sandbox'):
+    '--no-sandbox',
+    '--disable-dev-shm-usage'):
     options.add_argument(arg)
 
 # Specify your own path to store and load cookies
-COOKIE_FILE = "/usr/local/info/cookies.pkl"
+COOKIE_FILE = "/usr/local/info/douban.pkl"
 
 def manual_login():
     # First login to store cookies
@@ -57,6 +60,7 @@ def auto_login():
     for cookie in cookies:
         driver.add_cookie(cookie)
     driver.get(douburl)
+    driver.maximize_window()
     time.sleep(0.5)
     return driver
 
@@ -134,11 +138,47 @@ def rate_movie(rate, url):
     driver.quit()
 
 
+def delete_status():
+    # delete by tag 
+    page =  'https://www.douban.com/people/cactus207/statuses'
+    driver = auto_login()
+    pageid = 8
+    while pageid < 15:
+        driver.get(page + "?p=" + str(pageid))
+        ids = [] 
+        for idx, div in enumerate(BeautifulSoup(driver.page_source, 'lxml').findAll('div', {"class": "status-saying"})):
+            if '#Nature#' in div.text or '#Feelings#' in div.text or '#Paris#' in div.text:
+                ids.append(idx)
+
+        ss = driver.find_elements_by_class_name('btn-action-reply-delete')
+        for idx in ids:
+            try:
+                ss[idx].click()
+                time.sleep(0.3)
+                alert = driver.switch_to.alert
+                alert.accept()
+                time.sleep(random.randint(1,3))
+                # time.sleep(0.5)
+            except Exception as e:
+                print(e)
+
+        time.sleep(1)
+        driver.get(page + "?p=" + str(pageid))
+        page_source = driver.page_source
+        if any([tag in page_source for tag in ('#Nature#', '#Feelings#', '#Paris#')]):
+            pageid -= 1
+        else:
+            pageid += 1
+
+    time.sleep(2)
+    driver.quit()
+
 
 if __name__ == '__main__':
-    # post_status(sys.argv[1:])
+    post_status(sys.argv[1:])
     url = 'https://movie.douban.com/subject/25937991/?from=showing'
     url = 'https://movie.douban.com/subject/26425063/?tag=%E7%83%AD%E9%97%A8&from=gaia_video'
     url = 'https://movie.douban.com/subject/30157153/?tag=%E7%83%AD%E9%97%A8&from=gaia'
-    rate_movie(3, url)
+    # rate_movie(3, url)
+    # delete_status()
 

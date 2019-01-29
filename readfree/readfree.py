@@ -7,6 +7,7 @@ import json
 import re
 from pprint import pprint
 
+COOKIE_FILE = '/usr/local/info/rfcookies.dat'
 
 class Readfree:
     def __init__(self, account_json='/usr/local/info/readfree.json'):
@@ -19,8 +20,7 @@ class Readfree:
 
     def is_login(self):
         # return either False or a session with cookie loaded
-        cookie_path = '/usr/local/info/rfcookies.dat'
-        if not os.path.exists(cookie_path):
+        if not os.path.exists(COOKIE_FILE):
             return False
 
         session = requests.Session()
@@ -56,7 +56,7 @@ class Readfree:
             image_path = "images/captcha.jpg"
             urlretrieve(self.mainpage + captcha['src'], image_path)
             os.system("open images/captcha.jpg")
-            text = input("==Type in what u see: ").strip()
+            text = input(">> Type in what u see: ").strip()
             # self.recognize_captcha(image_path)
         return text
 
@@ -68,14 +68,16 @@ class Readfree:
         if session:
             return session
 
-        dhost = "http://readfree.me/accounts/login/?next=/"
+        dhost = "https://readfree.me/auth/login/?next=/"
         session = requests.Session()
         session.headers = self.headers
         r_get = session.get(dhost)
         account = self.load_account(self.account_json)
 
-        csrftoken = r_get.cookies['csrftoken']
         bsobj = BeautifulSoup(r_get.text, 'lxml')
+        csrftoken = bsobj.find("input", {"name":"csrfmiddlewaretoken"})['value']
+        print(csrftoken, " >> 000")
+        # return 
         captcha_0 = bsobj.find("input", {"name": "captcha_0"})["value"]
         captcha_1 = self.recognizeCaptcha(bsobj)
         # print(captcha_0, captcha_1)
@@ -87,11 +89,11 @@ class Readfree:
             'captcha_0': captcha_0,
             'captcha_1': captcha_1}
         r_post = session.post(dhost, data=params, headers=self.headers)
+        print(r_post.text)
 
-        if "/accounts/logout/" in r_post.text:
-            print("Login SUCCEED.")
-            # save cookies to local
-            with open('/usr/local/info/cookies.dat', 'wb') as f:
+        if "/accounts/settings/" in r_post.text:
+            print("LOGIN SUCCEED.")
+            with open(COOKIE_FILE, 'wb') as f:
                 pickle.dump(session.cookies._cookies, f)
         return session
 

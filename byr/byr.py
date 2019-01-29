@@ -20,7 +20,7 @@ MAIN_PAGE = 'https://bt.byr.cn/'
 LOGIN_PAGE = 'https://bt.byr.cn/login.php'
 SESSION = requests.Session()
 ACCOUNT = {}
-targetspace = '/mnt/volume_sfo2_01/'
+targetspace = '/mnt/volume_sfo2_03/'
 
 def get_account():
 	''' user id
@@ -234,7 +234,7 @@ def download_files():
 	print(">> Terminating transmission-cli & Cleaning Downloads, torrents resume...")
 	os.system("pkill -f transmission")  # terminal previous threads
 	# os.system("sleep 10; rm -rf /root/Downloads/*")
-	os.system("sleep 10; rm -rf /mnt/volume_sfo2_01/*")
+	os.system("sleep 10; rm -rf " + targetspace + "/*")
 	os.system("rm -f /root/.config/transmission/torrents/*")
 	os.system("rm -f /root/.config/transmission/resume/*")
 	os.system("rm -f *.torrent")    # removing resumes
