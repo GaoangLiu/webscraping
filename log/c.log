@@ -31,3 +31,4 @@
 * Sat 01/19/19/08:50:41: improved byr.py
 * Mon 01/21/19/12:22:28: [new sub-repo] send Gmail with Python3
 * Tue 01/29/19/16:41:31: [update] readfree to version 2: remove irrelevant functions / rewrite login() method
+* Sun 02/17/19/07:08:59: [new sub-repo] for posting dramas to weibo
