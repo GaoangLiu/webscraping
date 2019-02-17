@@ -32,3 +32,4 @@
 * Mon 01/21/19/12:22:28: [new sub-repo] send Gmail with Python3
 * Tue 01/29/19/16:41:31: [update] readfree to version 2: remove irrelevant functions / rewrite login() method
 * Sun 02/17/19/07:08:59: [new sub-repo] for posting dramas to weibo
+* Sun 02/17/19/10:32:01: [update] weibo to reply with @nick-name of author

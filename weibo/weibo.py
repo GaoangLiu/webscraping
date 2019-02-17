@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+# from bs4 import BeautifulSoup
 import pickle
 import time
 import sys
@@ -67,6 +68,7 @@ class Weibo():
         self.driver.get(self.hotpage)
         time.sleep(1)
         core = random.choice(['24小时', '1小时', '周榜', '月榜', '男榜', '女榜'])
+
         self.driver.find_element_by_partial_link_text(core).click()
         self.driver.set_window_size(1024, 30000)
         time.sleep(3)
@@ -75,15 +77,17 @@ class Weibo():
         time.sleep(1)
         feed = self.driver.find_elements_by_class_name("WB_text")[wid+1].text
 
-        fakename = ''.join(faker.Faker().name().split())
-        feed = '/'.join(feed.split('：')[1:]) + ' @' + fakename
+        # fakename = ''.join(faker.Faker().name().split())
+        nickname = self.driver.find_elements_by_class_name('WB_info')[wid].text
+        feed = '/'.join(feed.split('：')[1:]) + ' @' + nickname
         print(wid, feed)
         # print(self.driver.page_source)   
+        time.sleep(2)
         self.driver.find_elements_by_class_name('W_input')[1].send_keys(feed)
         self.driver.find_element_by_partial_link_text('评论').click()
 
 
-    def safeWaterFeeds(self, n=20):
+    def safeWaterFeeds(self, n=10):
         for _ in range(n):
             try:
                 self.waterFeeds()
@@ -95,8 +99,8 @@ if __name__ == '__main__':
     images = ['404.jpg', 'test.jpg']
     wb = Weibo()
     wb.login()
-    # wb.postStatus('莫道萤光小,犹怀照夜心。\n清风不识字,何故乱翻书')
-    wb.safeWaterFeeds()
+    wb.safeWaterFeeds(5)
+    # wb.waterFeeds()
     wb.tearDown()
 
 
