@@ -23,14 +23,13 @@ class Weibo():
 
     def initDriver(self):
         options = Options()
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-gpu')
         self.driver = webdriver.Chrome(options=options)
 
     def loginFromCookie(self):
         if not os.path.exists(self.ckfile): return False 
-        self.initDriver()
         self.driver.get(self.mainpage)
         for cookie in pickle.load(open(self.ckfile, "rb")):
             self.driver.add_cookie(cookie)
@@ -39,10 +38,12 @@ class Weibo():
 
 
     def login(self):
+        self.initDriver()        
         if self.loginFromCookie(): return 
 
         self.driver.get(self.mainpage)
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'W_input')))            
+        self.driver.find_elements_by_class_name('W_input')[1].clear()
         self.driver.find_elements_by_class_name('W_input')[1].send_keys('0012344072558')
         self.driver.find_elements_by_class_name('W_input')[2].send_keys('weibo@2019')
         self.driver.find_elements_by_class_name('W_input')[2].send_keys(Keys.RETURN)         
