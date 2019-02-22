@@ -88,7 +88,7 @@ class ReadFree():
             down_number = i.text.replace('下载', '').strip('\n')
             down_number = random.randint(1024, 2048) if down_number == '1k+' else int(down_number)
             if down_number + pushnums[j] > maxpushdown:
-                title = i.attrs.get('title')
+                title = i.attrs.get('title').replace(' ','').replace('(', '').replace(')','')
                 downlink = i.attrs.get('href')                
                 maxpushdown = down_number + pushnums[j]
         print(maxpushdown, title, downlink)
@@ -104,14 +104,18 @@ class ReadFree():
         if postfix == 'mobi':
             os.system('ebook-convert {} {}'.format(bookname, 'books/' + title + ".epub"))
         os.system('ebook-convert {} {}'.format('books/' + title + ".epub", 'books/' + title + '.mobi'))
-        bookname = 'books/' + title + '.mobi'
 
         upload_page = bookurl.replace('book', 'fileupload')
         print('uploading {} to {}'.format(bookname, bookurl))
 
         soup = BeautifulSoup(self.session.get(bookurl).text, 'lxml')
         token = soup.find("input", {"name":"csrfmiddlewaretoken"}).attrs['value']
+
+        bookname = 'books/' + title + '.mobi'
         res = self.session.post(upload_page, data={'csrfmiddlewaretoken':token}, files={'doc':open(bookname, 'rb')})
+
+        bookname = bookname.replace('mobi', 'epub')
+        res = self.session.post(upload_page, data={'csrfmiddlewaretoken':token}, files={'doc':open(bookname, 'rb')})        
         print('uploaded.')
         return True
 
@@ -133,11 +137,9 @@ if __name__ == '__main__':
     rf = ReadFree('/usr/local/info/rfcookies.pkl', '/usr/local/info/readfree.json')
     rf.login()
     rf.shuffleUploadBooks()
-    # rf.uploadBook('https://readfree.me/book/26734228/')
 
     # rf = ReadFree('/usr/local/info/ssruoz_rf.dat', '/usr/local/info/ssruoz_rf.json')    
-    # print(arrow.now().format('YYYY-MM-DD HH-mm'))
-    # pprint(rf.getAccountInfo())
+
 
 
 
