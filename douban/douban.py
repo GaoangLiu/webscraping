@@ -98,37 +98,38 @@ class Douban:
             data={
                 'ck': ck_value,
                 'comment': content})
-        print("🐜 status posted SUCCEED !")
+        print("🐜 status posted successfully.")
+
+    def postMedia(self, text, images):
+        self.save_cookies_login()
+        s = self.session
+        ck_value = s.cookies['ck']
+
+        import re
+        upload_auth_token = re.findall(r'UPLOAD_AUTH_TOKEN:\s*\"(.*)\"', str(BeautifulSoup(s.get(self.mainpage).text, 'lxml')))
+        imgurls = []
+        for i in images:
+            res = s.post('https://www.douban.com/j/upload', data={'ck':ck_value, 'upload_auth_token':upload_auth_token}, files={"image":open(i, 'rb')})
+            url = json.loads(BeautifulSoup(res.text, 'lxml').find('p').text)['url']
+            imgurls.append(url)
+        res = self.session.post(self.mainpage, data={'ck':ck_value, 'comment':text, 'uploaded':imgurls})
+        soup = BeautifulSoup(res.text, 'lxml')
+        print('status with media was successfully posted.')
 
 
 if __name__ == '__main__':
-    Douban().post_status("-- sent with Python.")
+    db = Douban()
+    db.postMedia("再来几张高清壁纸..........", ['house.jpg', 'tur.jpg', 'res.jpg'])
 
 
 
 
 
-#     s = session.post(
-#         "https://accounts.douban.com/login",
-#         data=params)
-#     response_obj = BeautifulSoup(s.text, features="lxml")
-#     if 'UPLOAD_AUTH_TOKEN' in response_obj.text:
-#         print("Login SUCCESS!")
 
-#     # print(response_obj.text)
 
-#     # status = open('captcha.jpg', 'r').read()
-#     files = {'file': open('captcha.jpg', 'rb')}
-#     params = {
-#     r = session.post("https://www.douban.com", data=params, files=files)
-#         'ck': "vapU",
-#         'comment': "Status with image."
-#     }
 
-#     r = session.post("https://www.douban.com", data=params)
-#     # response_obj = BeautifulSoup(r.text, features="lxml")
-#     # print(response_obj.text)
-#     # if response_obj.find("div", {"class": "messages"}) is not None:
-#     # print(response_obj.find("div", {"class": "messages"}).get_text())
-# else:
-#     print("The CAPTCHA wasn't read correctly")
+
+
+
+
+
