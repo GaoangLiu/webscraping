@@ -7,7 +7,8 @@ import json
 import re
 from pprint import pprint
 
-COOKIE_FILE = '/usr/local/info/rfcookies.dat'
+COOKIE_FILE = '/usr/local/info/ssruoz_rf.dat'
+login_page = "https://readfree.me/auth/login/?next=/"
 
 class Readfree:
     def __init__(self, account_json='/usr/local/info/readfree.json'):
@@ -16,28 +17,17 @@ class Readfree:
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Inter Mac OS X 10_9_5) AppleWebKit 537.36 (KHTML, like Gecko) Chrome",
             "Accppt": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*,q=0.8"}
-        self.s = self.save_cookie_login()
+        self.s = requests.Session()
 
-    def is_login(self):
+    def isLogin(self):
         # return either False or a session with cookie loaded
         if not os.path.exists(COOKIE_FILE):
             return False
 
-        session = requests.Session()
-        with open(cookie_path, 'rb') as f:
-            cookies = pickle.load(f)
-            cj = requests.cookies.RequestsCookieJar()
-            cj._cookies = cookies
-            session.cookies = cj
-            session.headers = self.headers
+        self.s.cookies.update(pickle.load(open(COOKIE_FILE, 'rb')))
 
-        r_get = session.get(
-            "http://readfree.me/accounts/profile/bluesea/wish/")
-        if '/accounts/profile' in r_get.text:
-            print("🕷  -- cookie remains valid.")
-            return session
-        else:
-            return False
+        res = self.s.get("http://readfree.me/accounts/profile/bluesea/wish/")
+        return '/accounts/profile' in res.text
 
     def recognize_captcha(self, img):
         OCR().process(img)
@@ -60,50 +50,46 @@ class Readfree:
             # self.recognize_captcha(image_path)
         return text
 
-    def save_cookie_login(self):
+    def login(self):
         ''' Log in account and localize cookies for further explorations.
         return logged session
         '''
-        session = self.is_login()
-        if session:
-            return session
+        if self.isLogin():
+            print('>> Cookies remain valid.')
+            return 
 
-        dhost = "https://readfree.me/auth/login/?next=/"
-        session = requests.Session()
-        session.headers = self.headers
-        r_get = session.get(dhost)
+        res = self.s.get(login_page, headers=self.headers)
         account = self.load_account(self.account_json)
 
-        bsobj = BeautifulSoup(r_get.text, 'lxml')
-        csrftoken = bsobj.find("input", {"name":"csrfmiddlewaretoken"})['value']
+        soup = BeautifulSoup(res.text, 'lxml')
+        csrftoken = soup.find("input", {"name":"csrfmiddlewaretoken"})['value']
         print(csrftoken, " >> 000")
         # return 
-        captcha_0 = bsobj.find("input", {"name": "captcha_0"})["value"]
-        captcha_1 = self.recognizeCaptcha(bsobj)
+        captcha_0 = soup.find("input", {"name": "captcha_0"})["value"]
+        captcha_1 = self.recognizeCaptcha(soup)
         # print(captcha_0, captcha_1)
 
         params = {
-            'email': account['email'],
+            'login': account['email'],
             'password': account['password'],
             'csrfmiddlewaretoken': csrftoken,
             'captcha_0': captcha_0,
             'captcha_1': captcha_1}
-        r_post = session.post(dhost, data=params, headers=self.headers)
-        print(r_post.text)
+        print(params)
+        res = self.s.post(dhost, data=params, headers=self.headers)
+        print(res.text)
 
-        if "/accounts/settings/" in r_post.text:
-            print("LOGIN SUCCEED.")
+        if "/accounts/settings/" in res.text:
+            print(">> LOGIN SUCCEED.")
             with open(COOKIE_FILE, 'wb') as f:
-                pickle.dump(session.cookies._cookies, f)
-        return session
+                pickle.dump(self.s.cookies, f)
+
 
     def get_account_info(self):
         ''' there are only few infos on each user
         return : username
         '''
-
-        session = self.s
-        soup = BeautifulSoup(session.get(self.mainpage).text, 'lxml')
+        soup = BeautifulSoup(self.s.get(self.mainpage).text, 'lxml')
         # print(soup)
         link = soup.find("a", href=re.compile(".*accounts/profile.*"))
         infos = []
@@ -225,8 +211,8 @@ class Aux:
 
 
 if __name__ == '__main__':
-    rf = Readfree('/usr/local/info/readfree.json')
-    rf.save_cookie_login()
+    rf = Readfree('/usr/local/info/ssruoz_rf.json')
+    rf.login()
 
 
 # image_file = Image.open("images/captcha.jpg") # open colour image
