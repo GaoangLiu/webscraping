@@ -114,12 +114,13 @@ class Douban:
             imgurls.append(url)
         res = self.session.post(self.mainpage, data={'ck':ck_value, 'comment':text, 'uploaded':imgurls})
         soup = BeautifulSoup(res.text, 'lxml')
-        print('status with media was successfully posted.')
+        print('status with media was SUCCESSFULLY posted.')
 
 
 if __name__ == '__main__':
     db = Douban()
-    db.postMedia("再来几张高清壁纸..........", ['house.jpg', 'tur.jpg', 'res.jpg'])
+
+    # db.postMedia("再来几张高清壁纸..........", ['house.jpg', 'tur.jpg', 'res.jpg'])
 
 
 

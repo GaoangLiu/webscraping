@@ -39,3 +39,4 @@
 * Fri 02/22/19/20:05:03: [update] bot for readfree ssruoz
 * Fri 02/22/19/20:12:58: [bug fixed]: forget to import certain package for suorz
 * Sat 02/23/19/03:47:47: new [functionalities]: now i can upload imgs without webdriver
+* Mon 02/25/19/08:17:27: [update] donban.py / use session instead of webdriver to upload images
