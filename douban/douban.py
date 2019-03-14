@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from PIL import ImageOps
 from ocr import OCR
+from termcolor import colored
 
 COOKIE_PATH = "/usr/local/info/dbcookie.dat"
 
@@ -42,10 +43,10 @@ class Douban:
         ''' Log in account and localize cookies for further explorations.
         '''
         if self.is_login():
-            print("🕷  Cookie remains valid, already logged in.")
+            print("🕷  COOKIE remains VALID. LOGIN", colored('SUCCESS!', 'green'))
             return
         else:
-            print("🕷  Cookie is no more valid.")
+            print("🕷  COOKIE is INVALID", colored('FAILED', 'red'))            
 
         dhost = "http://www.douban.com/login"
         r_get = requests.get(dhost)

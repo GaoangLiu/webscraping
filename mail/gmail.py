@@ -48,4 +48,4 @@ class Gmail():
 
 if __name__ == '__main__':
     gm = Gmail()
-    gm.sendmail(['ssrzz@pm.me'], 'Are you okay?', subject='Essential')
+    gm.sendmail(['blueshit@pm.me'], '你的注册验证码为：J2QSJ有效期为30分钟', subject='注册验证码')
