@@ -8,6 +8,7 @@ from email.header import Header
 import json
 import logging
 import os.path as op
+import sys
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
@@ -48,4 +49,6 @@ class Gmail():
 
 if __name__ == '__main__':
     gm = Gmail()
-    gm.sendmail(['blueshit@pm.me'], '你的注册验证码为：J2QSJ有效期为30分钟', subject='注册验证码')
+    # gm.sendmail(['blueshit@pm.me'], '你的注册验证码为：J2QSJ有效期为30分钟', subject='注册验证码')
+    gm.sendmail([sys.argv[1]], sys.argv[2], subject = 'Test', files = [sys.argv[3]])
+
