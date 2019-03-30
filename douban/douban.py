@@ -43,12 +43,12 @@ class Douban:
         ''' Log in account and localize cookies for further explorations.
         '''
         if self.is_login():
-            print("🕷  COOKIE remains VALID. LOGIN", colored('SUCCESS!', 'green'))
+            print("🕷  Cookie remains VALID, login", colored('SUCCESS!', 'green'))
             return
         else:
-            print("🕷  COOKIE is INVALID", colored('FAILED', 'red'))            
+            print("🕷  Cookie is INVALID", colored('FAILED', 'red'))            
 
-        dhost = "http://www.douban.com/login"
+        dhost = "https://accounts.douban.com/j/mobile/login/basic"
         r_get = requests.get(dhost)
         bs_get = BeautifulSoup(r_get.text, 'lxml')
 
@@ -59,21 +59,29 @@ class Douban:
         account = json.load(open('/usr/local/info/douban.json', 'r'))
 
         params = {
-            'form_email': account['email'],
-            'form_password': account['password'],
-            'captcha-solution': captcha_solution,
-            'captcha-id': captcha_id}
+            'name': account['email'],
+            'password': account['password'],
+            'ck':'',
+            'remember':'true',
+            'ticket':''}
+
+        if captcha_id:
+            params['captcha-solution'] = captcha_solution
+            params['captcha-id'] = captcha_id
         print(params)
 
-        s = self.session.post("https://accounts.douban.com/login", data=params)
+        s = self.session.post(dhost, data=params)
         soup = BeautifulSoup(s.text, features="lxml")
-        # print(soup.text)
+        print(soup.text)
+        results = json.loads(soup.text)        
 
-        if 'UPLOAD_AUTH_TOKEN' in soup.text:
-            print("Login SUCCESS!")
-            # save cookies to local
+        if results['status'] == "success":
+            print("Login ", colored("SUCCESS!", 'green'))
             with open(COOKIE_PATH, 'wb') as f:
                 pickle.dump(self.session.cookies, f)
+        else:
+            print("Login Failed.")
+            sys.exit(0)
         return
 
     def rec_captcha(self, captcha_items):
@@ -84,12 +92,10 @@ class Douban:
             urlretrieve(captcha_items['src'], image_path)
             return OCR().process_image(image_path)
         else:
-            print("🕷 There is no captcha for this login page.")
+            print("🕷  No CAPTCHA required for this login page.")
 
 
     def post_status(self, content):
-        ''' For now, only pure text status is support
-        '''
         self.save_cookies_login()
         ck_value = self.session.cookies['ck']
         # files = {'media': open('images/captcha.jpg', 'rb').read()}
@@ -99,7 +105,7 @@ class Douban:
             data={
                 'ck': ck_value,
                 'comment': content})
-        print("🐜 status posted successfully.")
+        print("🐜  status posted successfully.")
 
     def postMedia(self, text, images):
         self.save_cookies_login()
@@ -115,18 +121,13 @@ class Douban:
             imgurls.append(url)
         res = self.session.post(self.mainpage, data={'ck':ck_value, 'comment':text, 'uploaded':imgurls})
         soup = BeautifulSoup(res.text, 'lxml')
-        print('status with media was SUCCESSFULLY posted.')
+        print('🕷  Status with media was SUCCESSFULLY posted.')
 
 
 if __name__ == '__main__':
     db = Douban()
-
-    # db.postMedia("再来几张高清壁纸..........", ['house.jpg', 'tur.jpg', 'res.jpg'])
-
-
-
-
-
+    db.save_cookies_login()
+    
 
 
 
