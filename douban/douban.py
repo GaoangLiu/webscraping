@@ -43,10 +43,10 @@ class Douban:
         ''' Log in account and localize cookies for further explorations.
         '''
         if self.is_login():
-            print("🕷  Cookie remains VALID, login", colored('SUCCESS!', 'green'))
+            print("🕷  LOGIN", colored('SUCCESS!', 'green'))
             return
         else:
-            print("🕷  Cookie is INVALID", colored('FAILED', 'red'))            
+            print("🕷  COOKIE INVALID. LOGIN", colored('FAILED', 'red'))            
 
         dhost = "https://accounts.douban.com/j/mobile/login/basic"
         r_get = requests.get(dhost)
@@ -121,7 +121,7 @@ class Douban:
             imgurls.append(url)
         res = self.session.post(self.mainpage, data={'ck':ck_value, 'comment':text, 'uploaded':imgurls})
         soup = BeautifulSoup(res.text, 'lxml')
-        print('🕷  Status with media was SUCCESSFULLY posted.')
+        print('🕷  POSTED !')
 
 
 if __name__ == '__main__':

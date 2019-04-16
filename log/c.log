@@ -43,3 +43,4 @@
 * Thu 03/14/19/14:24:38: updated douban.py
 * Sun 03/24/19/17:15:58: Add kindle.py
 * Sat 03/30/19/22:33:26: [douban.py] updated login post method
+* Tue 04/16/19/20:50:37: [douban] add script for downloading the whole album
